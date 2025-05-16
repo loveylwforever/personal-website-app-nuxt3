@@ -8,7 +8,7 @@
             <span class="logo-text">极物聊天</span>
           </div>
           
-          <div class="footer-social">
+          <!-- <div class="footer-social">
             <a href="#" class="social-link" title="微信">
               <span class="social-icon">💬</span>
             </a>
@@ -18,7 +18,7 @@
             <a href="https://jiwuchat.kiwi233.top" target="_blank" rel="noopener" class="social-link" title="官网">
               <span class="social-icon">🌐</span>
             </a>
-          </div>
+          </div> -->
         </div>
         
         <div class="footer-links">
@@ -117,32 +117,32 @@ const currentYear = new Date().getFullYear();
     }
   }
   
-  .footer-social {
-    display: flex;
-    gap: 16px;
+  // .footer-social {
+  //   display: flex;
+  //   gap: 16px;
     
-    .social-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      color: white;
-      text-decoration: none;
-      transition: all 0.3s ease;
+  //   .social-link {
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: center;
+  //     width: 36px;
+  //     height: 36px;
+  //     background: rgba(255, 255, 255, 0.1);
+  //     border-radius: 50%;
+  //     color: white;
+  //     text-decoration: none;
+  //     transition: all 0.3s ease;
       
-      &:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-3px);
-      }
+  //     &:hover {
+  //       background: rgba(255, 255, 255, 0.2);
+  //       transform: translateY(-3px);
+  //     }
       
-      .social-icon {
-        font-size: 18px;
-      }
-    }
-  }
+  //     .social-icon {
+  //       font-size: 18px;
+  //     }
+  //   }
+  // }
   
   .footer-links {
     display: grid;
@@ -249,9 +249,9 @@ const currentYear = new Date().getFullYear();
       justify-content: center;
     }
     
-    .footer-social {
-      justify-content: center;
-    }
+    // .footer-social {
+    //   justify-content: center;
+    // }
     
     .footer-links {
       grid-template-columns: 1fr;

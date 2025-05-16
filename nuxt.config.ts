@@ -11,9 +11,11 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode'
   ],
   css: [
-    '@/assets/scss/theme.scss',
+    '@/assets/scss/themes.scss',
     '@/assets/scss/global.scss',
+    '@/assets/scss/common.scss',
     '@/assets/scss/fonts.scss',
+    '@/assets/scss/main.scss',
     'element-plus/dist/index.css',
     '@/assets/scss/element-theme.scss',
     '@/assets/scss/element-overrides.scss'
@@ -31,7 +33,7 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'preload', href: '/fonts/main-font.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }
+        //字体预加载配置 { rel: 'preload', href: '/fonts/main-font.woff2', as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }
       ]
     },
     pageTransition: {
@@ -44,10 +46,10 @@ export default defineNuxtConfig({
     components: ['ElButton', 'ElIcon', 'ElDropdown', 'ElDropdownMenu', 'ElDropdownItem', 'ElInput', 'ElMessage']
   },
   colorMode: {
-    classSuffix: '',
     preference: 'system',
     fallback: 'light',
-    storageKey: 'color-mode',
+    classSuffix: '',
+    storageKey: 'nuxt-color-mode',
   },
   vite: {
     css: {

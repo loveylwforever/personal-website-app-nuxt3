@@ -19,6 +19,10 @@ const layoutStore = useLayoutStore()
 const router = useRouter()
 const isAlternativeLayout = computed(() => layoutStore.layout === 'alternative')
 
+// 主题状态 - 使用Nuxt的ColorMode
+const colorMode = useColorMode()
+const currentTheme = computed(() => colorMode.value)
+
 // 添加客户端专用的状态
 const isClientSide = ref(process.client)
 const isInitialized = ref(false)
@@ -32,11 +36,6 @@ const platformButtonClass = computed(() => getPlatformButtonClass(preferredDownl
 // 共用状态
 const screenshotWrapper = ref<HTMLElement | null>(null)
 const showOtherDownloads = ref(false)
-
-// 主题状态，用于控制粒子效果
-const currentTheme = ref('dark')
-// 存储主题变化监听器引用
-const themeChangeHandler = ref<MutationObserver | null>(null)
 
 // 3D hover effect 相关变量
 let currentX = 0
@@ -260,31 +259,6 @@ if (isClientSide.value) {
   detectPlatform()
 }
 
-// 检测并监听系统主题
-const checkSystemTheme = () => {
-  if (isClientSide.value) {
-    // 检查HTML元素是否有dark类名
-    const isDarkMode = document.documentElement.classList.contains('dark');
-    currentTheme.value = isDarkMode ? 'dark' : 'light';
-    
-    // 观察HTML元素类名变化，以响应主题切换
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          const isDark = document.documentElement.classList.contains('dark');
-          currentTheme.value = isDark ? 'dark' : 'light';
-        }
-      });
-    });
-    
-    // 开始观察
-    observer.observe(document.documentElement, { attributes: true });
-    
-    // 存储observer引用，以便在组件卸载时断开连接
-    themeChangeHandler.value = observer;
-  }
-}
-
 onMounted(() => {
   // 初始化数据
   initializeTypewriter()
@@ -292,7 +266,6 @@ onMounted(() => {
   // 确保在客户端再次检测平台，防止首次检测不准确
   if (isClientSide.value) {
     detectPlatform()
-    checkSystemTheme() // 检测系统主题
   }
   
   // 设置一个短暂的延迟再次初始化，确保DOM已完全渲染
@@ -303,27 +276,6 @@ onMounted(() => {
     // 确保DOM完全渲染后设置3D悬停效果
     setupScreenshotHoverEffect()
   }, 100)
-
-  // 在组件挂载后添加全局样式覆盖
-  const style = document.createElement('style')
-  style.textContent = `
-    .el-dropdown-menu__item:not(.is-disabled):hover,
-    .el-dropdown-menu__item:not(.is-disabled):focus,
-    .el-dropdown-menu__item:not(.is-disabled).selected,
-    .el-dropdown-menu__item:not(.is-disabled).is-active {
-      color: var(--gradient-start) !important;
-      background-color: rgba(255, 255, 255, 0.1) !important;
-    }
-    
-    .el-dropdown-menu__item {
-      color: rgba(255, 255, 255, 0.8) !important;
-    }
-    
-    .el-dropdown-menu__item.is-active {
-      color: var(--gradient-start) !important;
-    }
-  `
-  document.head.appendChild(style)
 })
 
 // 为了诊断问题，添加一个简单的辅助函数
@@ -369,11 +321,6 @@ onUnmounted(() => {
   if (typewriterFrame) {
     cancelAnimationFrame(typewriterFrame)
     typewriterFrame = null
-  }
-  
-  // 断开主题观察器连接
-  if (isClientSide.value && themeChangeHandler.value) {
-    themeChangeHandler.value.disconnect();
   }
 })
 </script>
@@ -604,8 +551,8 @@ onUnmounted(() => {
       </div>
     </el-dialog>
     
-    <!-- 3D粒子背景 -->
-    <Three3DParticles :theme="currentTheme" class="particles-background" />
+    <!-- 3D粒子背景 - 直接传递当前主题 -->
+    <Three3DParticles :theme="colorMode.value" class="particles-background" />
   </div>
 </template>
 
@@ -626,264 +573,6 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .particles-background {
     opacity: 0.6; /* 在移动端进一步降低不透明度，减少视觉干扰 */
-  }
-}
-
-/* 修改主内容容器样式，确保内容正常显示 */
-.home-centered, .home-page {
-  position: relative;
-  isolation: isolate; /* 创建新的层叠上下文 */
-}
-
-/* 共用样式 */
-.download-dialog {
-  .download-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 20px;
-    margin-top: 12px;
-    margin-bottom: 12px;
-  }
-  .download-option {
-    background: var(--card-bg);
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-    padding: 20px 18px 16px 18px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    min-height: 140px;
-    transition: box-shadow 0.22s cubic-bezier(.4,1.01,.32,1), transform 0.22s cubic-bezier(.4,1.01,.32,1);
-    border: 1.5px solid var(--border-color);
-    position: relative;
-    overflow: visible !important;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: -1;
-    }
-    
-    &:hover {
-      box-shadow: 0 6px 24px rgba(var(--gradient-end-rgb), 0.10);
-      transform: translateY(-3px) scale(1.025);
-      border-color: var(--gradient-start);
-      
-      .el-button {
-        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-        border-color: transparent;
-        color: #FFFFFF;
-      }
-    }
-    .option-info {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-      .option-icon {
-        font-size: 32px;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 1;
-      }
-      .option-details {
-        flex: 1;
-        min-width: 0;
-        h4 {
-          font-size: 16px;
-          margin: 0 0 4px;
-          font-weight: 600;
-          color: var(--text-color);
-        }
-        p {
-          font-size: 13px;
-          margin: 0;
-          color: var(--text-secondary);
-          white-space: normal;
-          line-height: 1.4;
-        }
-      }
-    }
-    
-    .download-badge {
-      align-self: flex-end;
-    }
-    
-    .el-button {
-      align-self: flex-end;
-      transition: all 0.3s ease;
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      
-      .el-icon {
-        font-size: 14px;
-        margin-right: 6px;
-        transform: scale(0.9);
-      }
-      
-      :deep(.download-icon) {
-        width: 16px;
-        height: 16px;
-        transform: scale(0.85);
-        margin-right: 6px;
-      }
-      
-      &.recommended-platform {
-        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-        color: white;
-        border-color: transparent;
-        position: relative;
-      }
-    }
-  }
-  
-  // 添加移动端适配
-  @media (max-width: 550px) {
-    .download-options {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto auto;
-    }
-    
-    .download-option {
-      min-height: 120px;
-    }
-  }
-}
-
-:deep(.el-dialog) {
-  --el-dialog-margin-top: 20vh;
-  border-radius: 16px;
-  background: 
-    linear-gradient(var(--bg-color), var(--bg-color)) padding-box,
-    linear-gradient(135deg, var(--gradient-start), var(--gradient-end)) border-box;
-  border: 2px solid transparent;
-  overflow: visible;
-  position: relative;
-  box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.15), 0 2px 12px 0 rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(16px);
-  color: var(--text-color);
-  
-  .el-dialog__content {
-    width: 100%;
-    overflow: visible;
-  }
-  
-  .el-dialog__header {
-    border-bottom: 1px solid var(--border-color);
-    padding: 20px;
-    margin-right: 0;
-    position: relative;
-    
-    .el-dialog__title {
-      font-weight: 600;
-      font-size: 18px;
-      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  }
-  
-  .el-dialog__body {
-    padding: 24px;
-    position: relative;
-  }
-  
-  @media (max-width: 768px) {
-    --el-dialog-margin-top: 10vh;
-    border-radius: 14px;
-    border-width: 2px;
-    width: 95% !important;
-    max-width: 500px !important;
-    
-    .el-dialog__header {
-      padding: 16px;
-      
-      .el-dialog__title {
-        font-size: 16px;
-      }
-    }
-    
-    .el-dialog__body {
-      padding: 16px;
-    }
-  }
-}
-
-:deep(.el-dialog__headerbtn) {
-  background: none !important;
-  border: none !important;
-  box-shadow: none !important;
-  color: var(--text-color) !important;
-  &:hover, &:focus {
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    color: var(--gradient-start) !important;
-  }
-}
-
-:deep(.el-dialog__headerbtn:hover) .el-dialog__close {
-  color: var(--gradient-start) !important;
-}
-
-:deep(.el-dropdown-menu) {
-  background: rgba(30, 30, 30, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  
-  .el-dropdown-menu__item {
-    color: rgba(255, 255, 255, 0.8) !important;
-    
-    &:hover, &:focus, &:active, &.is-active, &.selected, &.is-selected {
-      color: var(--gradient-start) !important;
-      background-color: rgba(255, 255, 255, 0.1) !important;
-    }
-    
-    &.el-dropdown-menu__item--divided {
-      color: var(--gradient-start) !important;
-    }
-    
-    .dropdown-link {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: inherit;
-      text-decoration: none;
-      
-      .el-icon {
-        font-size: 16px;
-      }
-    }
-  }
-}
-
-/* 全局覆盖Element Plus的下拉菜单项样式 */
-:root {
-  --el-dropdown-menuItem-hover-fill: color-mix(in srgb, var(--gradient-start) 15%, transparent);
-  --el-dropdown-menuItem-hover-color: var(--gradient-start);
-  --el-dropdown-menuItem-active-color: var(--gradient-start);
-  --el-dropdown-menuItem-active-fill: color-mix(in srgb, var(--gradient-start) 10%, transparent);
-}
-
-/* 修复在Firefox和Safari中的兼容性问题 */
-@supports not (color-mix(in srgb, white, black)) {
-  :root {
-    --el-dropdown-menuItem-hover-fill: rgba(var(--gradient-start-rgb), 0.15);
-    --el-dropdown-menuItem-hover-color: var(--gradient-start);
-    --el-dropdown-menuItem-active-color: var(--gradient-start);
-    --el-dropdown-menuItem-active-fill: rgba(var(--gradient-start-rgb), 0.1);
   }
 }
 
@@ -1737,6 +1426,278 @@ html.dark {
     font-weight: bold;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     z-index: 100;
+  }
+}
+
+/* 修改主内容容器样式，确保内容正常显示 */
+.home-centered, .home-page {
+  position: relative;
+  isolation: isolate; /* 创建新的层叠上下文 */
+}
+
+/* 共用样式 */
+.download-dialog {
+  .download-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+  .download-option {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    padding: 20px 18px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 140px;
+    transition: box-shadow 0.22s cubic-bezier(.4,1.01,.32,1), transform 0.22s cubic-bezier(.4,1.01,.32,1);
+    border: 1.5px solid var(--border-color);
+    position: relative;
+    overflow: visible !important;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+    
+    &:hover {
+      box-shadow: 0 6px 24px rgba(var(--gradient-end-rgb), 0.10);
+      transform: translateY(-3px) scale(1.025);
+      border-color: var(--gradient-start);
+      
+      .el-button {
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        border-color: transparent;
+        color: #FFFFFF;
+      }
+    }
+    .option-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      .option-icon {
+        font-size: 32px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+      }
+      .option-details {
+        flex: 1;
+        min-width: 0;
+        h4 {
+          font-size: 16px;
+          margin: 0 0 4px;
+          font-weight: 600;
+          color: var(--text-color);
+        }
+        p {
+          font-size: 13px;
+          margin: 0;
+          color: var(--text-secondary);
+          white-space: normal;
+          line-height: 1.4;
+        }
+      }
+    }
+    
+    .download-badge {
+      align-self: flex-end;
+    }
+    
+    .el-button {
+      align-self: flex-end;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      .el-icon {
+        font-size: 14px;
+        margin-right: 6px;
+        transform: scale(0.9);
+      }
+      
+      :deep(.download-icon) {
+        width: 16px;
+        height: 16px;
+        transform: scale(0.85);
+        margin-right: 6px;
+      }
+      
+      &.recommended-platform {
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        color: white;
+        border-color: transparent;
+        position: relative;
+      }
+    }
+  }
+  
+  // 添加移动端适配
+  @media (max-width: 550px) {
+    .download-options {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto auto;
+    }
+    
+    .download-option {
+      min-height: 120px;
+    }
+  }
+}
+
+:deep(.el-dialog) {
+  --el-dialog-margin-top: 20vh;
+  border-radius: 16px;
+  background: 
+    linear-gradient(var(--bg-color), var(--bg-color)) padding-box,
+    linear-gradient(135deg, var(--gradient-start), var(--gradient-end)) border-box;
+  border: 2px solid transparent;
+  overflow: visible;
+  position: relative;
+  box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.15), 0 2px 12px 0 rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(16px);
+  color: var(--text-color);
+  
+  .el-dialog__content {
+    width: 100%;
+    overflow: visible;
+  }
+  
+  .el-dialog__header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 20px;
+    margin-right: 0;
+    position: relative;
+    
+    .el-dialog__title {
+      font-weight: 600;
+      font-size: 18px;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+  
+  .el-dialog__body {
+    padding: 24px;
+    position: relative;
+  }
+  
+  @media (max-width: 768px) {
+    --el-dialog-margin-top: 10vh;
+    border-radius: 14px;
+    border-width: 2px;
+    width: 95% !important;
+    max-width: 500px !important;
+    
+    .el-dialog__header {
+      padding: 16px;
+      
+      .el-dialog__title {
+        font-size: 16px;
+      }
+    }
+    
+    .el-dialog__body {
+      padding: 16px;
+    }
+  }
+}
+
+:deep(.el-dialog__headerbtn) {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--text-color) !important;
+  &:hover, &:focus {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--gradient-start) !important;
+  }
+}
+
+:deep(.el-dialog__headerbtn:hover) .el-dialog__close {
+  color: var(--gradient-start) !important;
+}
+
+:deep(.el-dropdown-menu) {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+  
+  .el-dropdown-menu__item {
+    color: var(--text-color) !important;
+    
+    &:hover, &:focus, &:active, &.is-active, &.selected, &.is-selected {
+      color: var(--gradient-start) !important;
+      background-color: rgba(var(--gradient-start-rgb), 0.1) !important;
+    }
+    
+    &.el-dropdown-menu__item--divided {
+      color: var(--gradient-start) !important;
+    }
+    
+    .dropdown-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: inherit;
+      text-decoration: none;
+      
+      .el-icon {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+/* 在深色模式下覆盖下拉菜单样式 */
+html.dark :deep(.el-dropdown-menu) {
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  .el-dropdown-menu__item {
+    color: rgba(255, 255, 255, 0.8) !important;
+    
+    &:hover, &:focus, &:active, &.is-active, &.selected, &.is-selected {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+}
+
+/* 全局覆盖Element Plus的下拉菜单项样式 */
+:root {
+  --el-dropdown-menuItem-hover-fill: color-mix(in srgb, var(--gradient-start) 15%, transparent);
+  --el-dropdown-menuItem-hover-color: var(--gradient-start);
+  --el-dropdown-menuItem-active-color: var(--gradient-start);
+  --el-dropdown-menuItem-active-fill: color-mix(in srgb, var(--gradient-start) 10%, transparent);
+}
+
+/* 修复在Firefox和Safari中的兼容性问题 */
+@supports not (color-mix(in srgb, white, black)) {
+  :root {
+    --el-dropdown-menuItem-hover-fill: rgba(var(--gradient-start-rgb), 0.15);
+    --el-dropdown-menuItem-hover-color: var(--gradient-start);
+    --el-dropdown-menuItem-active-color: var(--gradient-start);
+    --el-dropdown-menuItem-active-fill: rgba(var(--gradient-start-rgb), 0.1);
   }
 }
 </style>

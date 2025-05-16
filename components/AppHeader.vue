@@ -60,7 +60,7 @@
             <el-button 
               class="icon-button theme-toggle-button" 
               circle 
-              @click="toggleTheme"
+              @click="onThemeToggle"
             >
               <ThemeToggle :is-dark="isDark" />
             </el-button>
@@ -195,7 +195,6 @@
                     v-model="currentFont"
                     class="font-select"
                     placeholder="选择字体"
-                    @change="changeFont"
                   >
                     <el-option
                       v-for="font in availableFonts"
@@ -252,24 +251,20 @@ const mobileMenuOpen = ref(false)
 const ecosystemMenuOpen = ref(false)
 const isHovered = ref(false)
 const settingsPanelOpen = ref(false)
+const rippleLock = ref(false)
 
 // 使用Pinia的theme store
 const isDark = computed(() => themeStore.isDark)
 
 // 初始化布局和字体设置
 const currentLayout = ref(layoutStore.layout)
-const currentFont = ref(fontStore.currentFont)
+const currentFont = ref(String(fontStore.currentFont || 'default'))
 const availableFonts = computed(() => fontStore.availableFonts)
 
-// 监听currentFont变化，确保预览区域更新
-watch(() => currentFont.value, (newFont) => {
-  // 直接获取字体值并应用
-  const fontValue = fontStore.getFontFamilyValue(newFont as string);
-  const previewElement = document.querySelector('.font-preview') as HTMLElement;
-  if (previewElement) {
-    previewElement.style.fontFamily = fontValue;
-  }
-});
+watch(currentFont, (val) => {
+  fontStore.setFont(val)
+  fontStore.savePreference()
+})
 
 const breakpoints = useBreakpoints({
   mobile: 768,
@@ -300,6 +295,11 @@ onMounted(() => {
 
   // 添加键盘事件监听
   document.addEventListener('keydown', handleKeydown)
+
+  // 保证currentFont的值在可选字体中，否则回退到第一个
+  if (!availableFonts.value.some((f: { id: string }) => f.id === currentFont.value)) {
+    currentFont.value = availableFonts.value[0]?.id || 'default'
+  }
 })
 
 onUnmounted(() => {
@@ -377,19 +377,17 @@ const setLayout = (value: string) => {
   layoutStore.setLayout(value)
 }
 
-// 字体设置
-const changeFont = (fontId: string) => {
-  // 更新本地状态
-  currentFont.value = fontId;
-  // 应用字体
-  fontStore.setFont(fontId);
-  // 保存用户偏好
-  fontStore.savePreference();
-}
-
 // 获取字体的CSS字体族
 const getFontFamily = (fontId: string): string => {
   return fontStore.getFontFamilyValue(fontId);
+}
+
+function onThemeToggle(e: MouseEvent) {
+  if (rippleLock.value) return
+  rippleLock.value = true
+  // 直接切换主题
+  themeStore.toggleTheme()
+  rippleLock.value = false
 }
 </script>
 
@@ -1173,10 +1171,24 @@ const getFontFamily = (fontId: string): string => {
 /* 字体设置样式 */
 .font-select {
   width: 100%;
-}
-
-.font-option {
-  padding: 6px 0;
+  
+  :deep(.el-input__wrapper) {
+    background: var(--bg-color);
+    border-color: var(--border-color);
+    box-shadow: none !important;
+    
+    &:hover, &.is-focus {
+      border-color: var(--gradient-start);
+    }
+    
+    .el-input__inner {
+      color: var(--text-color);
+    }
+    
+    .el-select__caret {
+      color: var(--text-secondary);
+    }
+  }
 }
 
 .font-preview {

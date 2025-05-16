@@ -1,0 +1,16 @@
+/* 通用样式和工具类 */
+
+/* 检测非触摸设备，为非触摸设备添加.no-touch类，用于优化悬停效果 */
+/* 注意：touch-detector.client.ts插件会自动添加no-touch或touch类 */
+
+/* 禁用非触摸设备上的点击延迟 */
+html.no-touch {
+  touch-action: manipulation;
+}
+
+/* 触摸设备适配 */
+html.touch {
+  cursor: default;
+}
+
+/* 在nuxt.config.ts中引入此文件，并在plugins中添加检测脚本 */
