@@ -1,0 +1,80 @@
+/* 特定组件样式覆盖 - 用于修复Element Plus组件中无法通过变量解决的样式问题 */
+
+/* Badge样式覆盖 */
+.el-badge__content {
+  background-color: var(--gradient-start);
+}
+
+/* 输入框焦点状态 - 解决焦点边框颜色问题 */
+.el-input.is-focus .el-input__wrapper {
+  box-shadow: 0 0 0 1px var(--gradient-start) inset !important;
+}
+
+/* 按钮悬停状态 - 添加渐变效果 */
+.el-button--primary:not(.is-disabled):active,
+.el-button--primary:not(.is-disabled):focus,
+.el-button--primary:not(.is-disabled):hover {
+  background: linear-gradient(135deg, var(--gradient-end), var(--gradient-start));
+  border-color: var(--gradient-end);
+}
+
+/* 下拉选择器当前选中项标签 */
+.el-select .el-select__tags .el-tag {
+  background-color: color-mix(in srgb, var(--gradient-start) 15%, transparent);
+  border-color: var(--gradient-start);
+  color: var(--gradient-start);
+  
+  .el-tag__close {
+    color: var(--gradient-start);
+    
+    &:hover {
+      background-color: var(--gradient-start);
+      color: white;
+    }
+  }
+}
+
+/* 修复下拉菜单在某些情况下仍显示蓝色的问题 */
+.el-dropdown-menu__item,
+.el-dropdown-menu__item:not(.is-disabled):hover,
+.el-dropdown-menu__item:focus,
+.el-dropdown-menu__item.is-active,
+.el-dropdown-menu__item.selected {
+  &:hover, &:focus, &:active {
+    color: var(--gradient-start) !important;
+    background-color: color-mix(in srgb, var(--gradient-start) 15%, transparent) !important;
+  }
+}
+
+/* 修复选择器在某些情况下仍显示蓝色的问题 */
+.el-select-dropdown__item.selected,
+.el-select-dropdown__item.is-disabled.selected {
+  color: var(--gradient-start) !important;
+  background-color: color-mix(in srgb, var(--gradient-start) 20%, transparent) !important;
+}
+
+.el-select-dropdown__item.hover, 
+.el-select-dropdown__item:hover {
+  background-color: color-mix(in srgb, var(--gradient-start) 10%, transparent) !important;
+}
+
+/* 兼容性写法 */
+@supports not (color-mix(in srgb, white, black)) {
+  .el-dropdown-menu__item:hover,
+  .el-dropdown-menu__item:focus,
+  .el-dropdown-menu__item.is-active {
+    background-color: rgba(var(--gradient-start-rgb), 0.15) !important;
+  }
+  
+  .el-select-dropdown__item.selected {
+    background-color: rgba(var(--gradient-start-rgb), 0.2) !important;
+  }
+  
+  .el-select-dropdown__item:hover {
+    background-color: rgba(var(--gradient-start-rgb), 0.1) !important;
+  }
+  
+  .el-select .el-select__tags .el-tag {
+    background-color: rgba(var(--gradient-start-rgb), 0.15);
+  }
+}

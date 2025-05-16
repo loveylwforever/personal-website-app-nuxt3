@@ -1,0 +1,198 @@
+/* Element Plus 主题覆盖 */
+
+:root {
+  /* 使用CSS变量覆盖Element Plus的默认变量 */
+  --el-color-primary: var(--gradient-start);
+  --el-color-primary-light-3: var(--gradient-start);
+  --el-color-primary-light-5: var(--gradient-start);
+  --el-color-primary-light-7: color-mix(in srgb, var(--gradient-start) 30%, white);
+  --el-color-primary-light-8: color-mix(in srgb, var(--gradient-start) 20%, white);
+  --el-color-primary-light-9: color-mix(in srgb, var(--gradient-start) 10%, white);
+  --el-color-primary-dark-2: var(--gradient-end);
+  
+  /* 下拉菜单项 */
+  --el-dropdown-menuItem-hover-fill: color-mix(in srgb, var(--gradient-start) 15%, transparent);
+  --el-dropdown-menuItem-hover-color: var(--gradient-start);
+  
+  /* 单选框 */
+  --el-radio-checked-text-color: var(--gradient-start);
+  --el-radio-checked-icon-color: var(--gradient-start);
+  --el-radio-checked-border-color: var(--gradient-start);
+  --el-radio-checked-bg-color: var(--gradient-start);
+  --el-radio-checked-input-border-color: var(--gradient-start);
+  
+  /* 复选框 */
+  --el-checkbox-checked-bg-color: var(--gradient-start);
+  --el-checkbox-checked-icon-color: white;
+  --el-checkbox-checked-text-color: var(--gradient-start);
+  --el-checkbox-checked-border-color: var(--gradient-start);
+  
+  /* 选择器 */
+  --el-select-input-focus-border-color: var(--gradient-start);
+  --el-select-input-hover-border-color: var(--gradient-start);
+  --el-select-option-hover-bg: color-mix(in srgb, var(--gradient-start) 10%, transparent);
+  --el-select-option-selected-bg: color-mix(in srgb, var(--gradient-start) 20%, transparent);
+  --el-select-option-selected-text-color: var(--gradient-start);
+  
+  /* 输入框 */
+  --el-input-focus-border-color: var(--gradient-start);
+  --el-input-hover-border-color: var(--gradient-start);
+  
+  /* 按钮 */
+  --el-button-bg-color: var(--gradient-start);
+  --el-button-border-color: var(--gradient-start);
+  --el-button-hover-bg-color: var(--gradient-end);
+  --el-button-hover-border-color: var(--gradient-end);
+  --el-button-active-bg-color: var(--gradient-end);
+  --el-button-active-border-color: var(--gradient-end);
+  
+  /* 弹出框 */
+  --el-popper-border-color: var(--border-color);
+}
+
+/* 深色模式下的调整 */
+html.dark {
+  --el-dropdown-menuItem-hover-fill: color-mix(in srgb, var(--gradient-start) 25%, transparent);
+  --el-select-option-hover-bg: color-mix(in srgb, var(--gradient-start) 15%, transparent);
+  --el-select-option-selected-bg: color-mix(in srgb, var(--gradient-start) 25%, transparent);
+}
+
+/* 下拉菜单选中和悬停状态 */
+.el-dropdown-menu__item:focus, 
+.el-dropdown-menu__item:not(.is-disabled):hover {
+  color: var(--gradient-start);
+  background-color: color-mix(in srgb, var(--gradient-start) 15%, transparent);
+}
+
+/* 单选框样式覆盖 */
+.el-radio__input.is-checked .el-radio__inner {
+  border-color: var(--gradient-start);
+  background: var(--gradient-start);
+}
+.el-radio__input.is-checked + .el-radio__label {
+  color: var(--gradient-start);
+}
+
+/* 复选框样式覆盖 */
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: var(--gradient-start);
+  border-color: var(--gradient-start);
+}
+.el-checkbox__input.is-checked + .el-checkbox__label {
+  color: var(--gradient-start);
+}
+
+/* Badge样式覆盖 */
+.el-badge__content {
+  background-color: var(--gradient-start);
+}
+
+/* 确保下拉菜单悬停状态使用主题色 */
+.el-dropdown__popper .el-dropdown-menu__item:focus,
+.el-dropdown__popper .el-dropdown-menu__item:not(.is-disabled):hover {
+  background-color: color-mix(in srgb, var(--gradient-start) 15%, transparent);
+  color: var(--gradient-start);
+}
+
+/* 选择器选项悬停和选中状态 */
+.el-select-dropdown__item.selected {
+  color: var(--gradient-start);
+  font-weight: bold;
+  background-color: color-mix(in srgb, var(--gradient-start) 20%, transparent) !important;
+}
+
+.el-select-dropdown__item.hover, 
+.el-select-dropdown__item:hover {
+  background-color: color-mix(in srgb, var(--gradient-start) 10%, transparent);
+}
+
+/* 选择器失焦但仍选中的项 */
+.el-select-dropdown__item.is-disabled.selected {
+  color: var(--gradient-start) !important;
+  opacity: 0.8;
+  background-color: color-mix(in srgb, var(--gradient-start) 15%, transparent) !important;
+}
+
+/* 下拉菜单选中项 */
+.el-dropdown-menu__item.is-disabled {
+  background-color: color-mix(in srgb, var(--gradient-start) 10%, transparent);
+  color: var(--gradient-start);
+  opacity: 0.8;
+  cursor: default;
+}
+
+/* 输入框焦点状态 */
+.el-input.is-focus .el-input__wrapper {
+  box-shadow: 0 0 0 1px var(--gradient-start) inset !important;
+}
+
+/* 按钮基本样式 */
+.el-button--primary {
+  --el-button-bg-color: var(--gradient-start);
+  --el-button-border-color: var(--gradient-start);
+  --el-button-text-color: white;
+  background-color: var(--gradient-start);
+  border-color: var(--gradient-start);
+}
+
+/* 按钮悬停状态 */
+.el-button--primary:not(.is-disabled):active,
+.el-button--primary:not(.is-disabled):focus,
+.el-button--primary:not(.is-disabled):hover {
+  background: linear-gradient(135deg, var(--gradient-end), var(--gradient-start));
+  border-color: var(--gradient-end);
+} 
+
+/* 通用弹出框样式 */
+.el-popper.is-light {
+  border-color: var(--border-color);
+}
+
+/* 下拉选择器 */
+.el-select-dropdown {
+  .el-scrollbar {
+    .el-select-dropdown__wrap {
+      .el-select-dropdown__list {
+        .el-select-dropdown__item {
+          &.selected {
+            color: var(--gradient-start);
+            background-color: color-mix(in srgb, var(--gradient-start) 20%, transparent) !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* 下拉选择器当前选中项 */
+.el-select .el-select__tags .el-tag {
+  background-color: color-mix(in srgb, var(--gradient-start) 15%, transparent);
+  border-color: var(--gradient-start);
+  color: var(--gradient-start);
+  
+  .el-tag__close {
+    color: var(--gradient-start);
+    
+    &:hover {
+      background-color: var(--gradient-start);
+      color: white;
+    }
+  }
+}
+
+/* 选择器弹出框 */
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
+  background-color: color-mix(in srgb, var(--gradient-start) 20%, transparent);
+  color: var(--gradient-start);
+  
+  &::after {
+    color: var(--gradient-start);
+  }
+}
+
+/* 下拉框中被禁用但选中的项目 */
+.el-select-dropdown__item.is-disabled.selected {
+  color: var(--gradient-start) !important;
+  opacity: 0.8;
+  background-color: color-mix(in srgb, var(--gradient-start) 15%, transparent) !important;
+} 
