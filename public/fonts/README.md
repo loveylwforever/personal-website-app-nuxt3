@@ -26,38 +26,12 @@
 编辑 `stores/font.ts` 文件，在 `availableFonts` 数组中添加新字体：
 
 ```typescript
-availableFonts: [
-  { id: 'default', name: '默认字体' },
-  { id: 'custom1', name: '自定义字体1' },
-  { id: '您的字体ID', name: '您的字体显示名称' },
-  // 添加更多字体...
-],
-```
-
-同时，在 `applyFontToDOM` 方法中添加相应的处理逻辑：
-
-```typescript
-applyFontToDOM(fontId: string) {
-  const root = document.documentElement
-  
-  switch (fontId) {
-    // ... 现有代码 ...
-    case '您的字体ID':
-      root.style.setProperty('--current-font-family', 'var(--font-family-您的字体名称)')
-      break
-    // ... 其他字体 ...
+const fontConfig = {
+  default: {
+    id: '字体id',
+    name: '字体名',
+    cssVar: 'var(--font-family-default)'
   }
-}
-```
-
-## 在CSS变量中注册
-
-最后，在 `assets/scss/fonts.scss` 中的 `:root` 部分添加CSS变量：
-
-```scss
-:root {
-  // ... 现有变量 ...
-  --font-family-您的字体名称: '您的字体名称', #{$font-family-default};
 }
 ```
 

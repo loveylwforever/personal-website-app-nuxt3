@@ -185,15 +185,11 @@ const detectPlatform = () => {
   try {
     const detectedPlatform = detectOS()
     const preferredPlatform = getPreferredDownloadPlatform()
-    
     // 设置当前检测到的平台
     currentPlatform.value = detectedPlatform
     preferredDownloadPlatform.value = preferredPlatform
     isInitialized.value = true
-    
-    console.log(`检测到平台: ${detectedPlatform}, 推荐下载平台: ${preferredPlatform}`)
   } catch (error) {
-    console.error('平台检测出错:', error)
     // 设置默认平台为 Windows
     preferredDownloadPlatform.value = 'windows'
     isInitialized.value = true
@@ -278,11 +274,6 @@ onMounted(() => {
   }, 100)
 })
 
-// 为了诊断问题，添加一个简单的辅助函数
-const debugTypewriter = () => {
-  // 删除所有调试日志
-}
-
 // 优化初始化函数
 const initializeTypewriter = () => {
   // 重置为正确长度的数组
@@ -291,8 +282,6 @@ const initializeTypewriter = () => {
   typewriterIndex.value = 0
   typewriterPhase.value = 'typing'
   lastFrameTime = performance.now()
-  
-  // debugTypewriter() // 输出调试信息
   
   if (typewriterFrame) {
     cancelAnimationFrame(typewriterFrame)

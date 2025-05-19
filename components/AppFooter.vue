@@ -48,7 +48,7 @@
         
         <div class="footer-bottom">
           <div class="footer-slogan">～不忘初心，方得始终～</div>
-          <div class="footer-copyright">© {{ currentYear }} Kiwi2333. 版权所有. 保留所有权利.</div>
+          <div class="footer-copyright">© {{ currentYear }} JamieGao. 版权所有. 保留所有权利.</div>
         </div>
       </div>
     </div>

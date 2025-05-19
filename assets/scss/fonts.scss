@@ -34,6 +34,14 @@ $font-family-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxy
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'ibaotu';
+  src: url('/fonts/ibaotu.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* 添加更多自定义字体... */
 
 /* 字体变量供全局使用 */
@@ -43,6 +51,7 @@ $font-family-default: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxy
   --font-family-alimamaDaoLiTi: 'alimamaDaoLiTi', #{$font-family-default};
   --font-family-alimamaFangYuanTiVF: 'alimamaFangYuanTiVF', #{$font-family-default};
   --font-family-alimamaShuHeiTi: 'alimamaShuHeiTi', #{$font-family-default};
+  --font-family-ibaotu: 'ibaotu', #{$font-family-default};
   --current-font-family: var(--font-family-default);
 }
 

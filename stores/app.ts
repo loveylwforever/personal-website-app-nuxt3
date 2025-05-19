@@ -33,7 +33,7 @@ export const useAppStore = defineStore('app', () => {
       
       isInitialized.value = true
     } catch (error) {
-      console.error('Failed to initialize app store:', error)
+      // console.error('Failed to initialize app store:', error)
     }
   }
   

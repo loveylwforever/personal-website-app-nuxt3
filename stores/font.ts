@@ -31,7 +31,12 @@ const fontConfig = {
     id: 'alimamaShuHeiTi',
     name: '阿里妈妈数黑体',
     cssVar: 'var(--font-family-alimamaShuHeiTi)'
-  }
+  },
+  ibaotu: {
+    id: 'ibaotu',
+    name: '包图小白体',
+    cssVar: 'var(--font-family-ibaotu)'
+  },
   // 添加新字体只需在此处添加一项配置
 }
 
@@ -52,23 +57,17 @@ export const useFontStore = defineStore('font', {
     },
 
     applyFontToDOM(fontId: string) {
-      console.log('applyFontToDOM', fontId);
-      
       // 应用字体到DOM
       const root = document.documentElement
-      
       // 先清除所有字体相关的类
       Object.keys(fontConfig).forEach(id => {
         root.classList.remove(`font-${id}`)
       })
-      
       // 添加对应的类
       root.classList.add(`font-${fontId}`)
-      
       // 从配置中获取CSS变量
       const fontCssVar = fontConfig[fontId as keyof typeof fontConfig]?.cssVar || fontConfig.default.cssVar
       root.style.setProperty('--current-font-family', fontCssVar)
-      
       // 为了确保全局应用，也设置在body上
       document.body.style.fontFamily = fontCssVar
     },
