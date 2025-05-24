@@ -85,7 +85,7 @@
               <div class="change-category">
                 <h3>🎉 首次发布</h3>
                 <ul>
-                  <li>基础聊天功能</li>
+                  <li>基础某某功能</li>
                   <li>用户认证系统</li>
                   <li>多平台支持</li>
                   <li>基础 UI 界面</li>
@@ -102,12 +102,12 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'default',
-  title: '极物聊天 - 更新日志'
+  title: '某某软件 - 更新日志'
 })
 // 如果需要设置页面标题，可以用如下方式：
 import { onMounted } from 'vue'
 onMounted(() => {
-  document.title = '更新日志 - 极物聊天'
+  document.title = '更新日志 - 某某软件'
 })
 </script>
 

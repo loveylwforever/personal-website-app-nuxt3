@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'default',
-  title: '极物聊天 - 项目'
+  title: '某某软件 - 项目'
 })
 
 import {
@@ -44,13 +44,13 @@ const visitProject = (project: string) => {
   <div class="projects-page">
     <div class="container">
       <h1 class="page-title">项目</h1>
-      <p class="page-subtitle">探索极物生态的其他优秀项目</p>
+      <p class="page-subtitle">探索某某生态的其他优秀项目</p>
       
       <div class="projects-grid">
         <div class="project-card">
           <div class="project-header">
             <div class="project-icon">🌐</div>
-            <h3>极物圈</h3>
+            <h3>某某圈</h3>
             <div class="project-badge">社区</div>
           </div>
           <p class="project-description">
@@ -80,7 +80,7 @@ const visitProject = (project: string) => {
         <div class="project-card">
           <div class="project-header">
             <div class="project-icon">💻</div>
-            <h3>极物聊天（Tauri）</h3>
+            <h3>某某软件（Tauri）</h3>
             <div class="project-badge">桌面端</div>
           </div>
           <p class="project-description">
@@ -110,7 +110,7 @@ const visitProject = (project: string) => {
         <div class="project-card">
           <div class="project-header">
             <div class="project-icon">⚡</div>
-            <h3>极物聊天（Electron）</h3>
+            <h3>某某软件（Electron）</h3>
             <div class="project-badge">桌面端</div>
           </div>
           <p class="project-description">
@@ -140,7 +140,7 @@ const visitProject = (project: string) => {
         <div class="project-card">
           <div class="project-header">
             <div class="project-icon">🔧</div>
-            <h3>极物后台系统</h3>
+            <h3>某某后台系统</h3>
             <div class="project-badge">管理端</div>
           </div>
           <p class="project-description">

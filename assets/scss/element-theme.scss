@@ -5,10 +5,13 @@
   --el-color-primary: var(--gradient-start);
   --el-color-primary-light-3: var(--gradient-start);
   --el-color-primary-light-5: var(--gradient-start);
-  --el-color-primary-light-7: color-mix(in srgb, var(--gradient-start) 30%, white);
-  --el-color-primary-light-8: color-mix(in srgb, var(--gradient-start) 20%, white);
-  --el-color-primary-light-9: color-mix(in srgb, var(--gradient-start) 10%, white);
+  --el-color-primary-light-7: var(--gradient-start);
+  --el-color-primary-light-8: var(--gradient-start);
+  --el-color-primary-light-9: var(--gradient-start);
   --el-color-primary-dark-2: var(--gradient-end);
+  --el-border-color-hover: var(--gradient-start);
+  --el-border-color-active: var(--gradient-start);
+  --el-border-color-focus: var(--gradient-start);
   
   /* 下拉菜单项 */
   --el-dropdown-menuItem-hover-fill: color-mix(in srgb, var(--gradient-start) 15%, transparent);
@@ -195,4 +198,63 @@ html.dark {
   color: var(--gradient-start) !important;
   opacity: 0.8;
   background-color: color-mix(in srgb, var(--gradient-start) 15%, transparent) !important;
+}
+
+/* 全局强力覆盖按钮边框色，去除蓝色边缘 */
+.el-button,
+.el-button--primary,
+button,
+.el-input__wrapper,
+.el-select__wrapper,
+.el-checkbox__inner,
+.el-radio__inner {
+  border-color: var(--gradient-start) !important;
+}
+
+.el-button:focus,
+.el-button--primary:focus,
+button:focus,
+.el-button:active,
+.el-button--primary:active,
+button:active,
+.el-button:hover,
+.el-button--primary:hover,
+button:hover,
+.el-input__wrapper:focus,
+.el-input__wrapper.is-focus,
+.el-select__wrapper:focus,
+.el-select__wrapper.is-focus {
+  border-color: var(--gradient-end) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px var(--gradient-end)33 !important;
+}
+
+/* 优化 el-select__wrapper，保留外边框，聚焦高亮主题色，失焦为默认色 */
+.el-select__wrapper {
+  border: 1.5px solid var(--border-color) !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: border-color 0.3s;
+}
+.el-select__wrapper:focus,
+.el-select__wrapper:active,
+.el-select__wrapper.is-focus {
+  border-color: var(--gradient-start) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px var(--gradient-start)33 !important; /* 主题色淡化高亮 */
+}
+
+/* 下拉框展开时（is-open）也保持主题色边框 */
+.el-select__wrapper.is-open,
+.el-select__wrapper.is-open:focus,
+.el-select__wrapper.is-open.is-focus {
+  border-color: var(--gradient-start) !important;
+  box-shadow: 0 0 0 2px var(--gradient-start)33 !important;
+}
+
+/* 去掉 el-button 鼠标移入移出的动态切换效果 */
+.el-button,
+.el-button--primary,
+button {
+  transition: none !important;
 } 

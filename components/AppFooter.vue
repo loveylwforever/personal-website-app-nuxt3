@@ -4,8 +4,8 @@
       <div class="footer-content">
         <div class="footer-top">
           <div class="footer-logo">
-            <div class="logo">JW</div>
-            <span class="logo-text">极物聊天</span>
+            <Logo style="width:36px;height:36px;" />
+            <span class="logo-text">某某软件</span>
           </div>
           
           <!-- <div class="footer-social">
@@ -32,17 +32,17 @@
           
           <div class="link-group">
             <h3>生态</h3>
-            <NuxtLink to="/jiwu-circle">极物圈</NuxtLink>
-            <NuxtLink to="/jiwu-chat-tauri">极物聊天（Tauri）</NuxtLink>
-            <NuxtLink to="/jiwu-chat-electron">极物聊天（Electron）</NuxtLink>
-            <NuxtLink to="/jiwu-admin">极物后台系统</NuxtLink>
+            <NuxtLink to="/jiwu-circle">某某圈</NuxtLink>
+            <NuxtLink to="/jiwu-chat-tauri">某某软件（Tauri）</NuxtLink>
+            <NuxtLink to="/jiwu-chat-electron">某某软件（Electron）</NuxtLink>
+            <NuxtLink to="/jiwu-admin">某某后台系统</NuxtLink>
           </div>
           
           <div class="link-group">
             <h3>资源</h3>
             <NuxtLink to="/changelog">更新日志</NuxtLink>
-            <a href="https://github.com/kiwi2333/jiwu-chat" target="_blank" rel="noopener">GitHub</a>
-            <a href="https://jiwuchat.kiwi233.top" target="_blank" rel="noopener">官方网站</a>
+            <a href="#" target="_blank" rel="noopener">GitHub</a>
+            <a href="#" target="_blank" rel="noopener">官方网站</a>
           </div>
         </div>
         
@@ -56,6 +56,7 @@
 </template>
 
 <script setup>
+import Logo from '~/components/Logo.vue'
 const currentYear = new Date().getFullYear();
 </script>
 

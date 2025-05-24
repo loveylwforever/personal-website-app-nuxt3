@@ -18,7 +18,7 @@
         <!-- 品牌元素 -->
         <div class="brand-wrapper">
           <div class="app-logo">
-            <img src="/images/logo.svg" alt="极物聊天" class="logo-image" />
+            <Logo style="width:50px;height:50px;" />
           </div>
           <h2>{{ isRegister ? '创建新账号' : '欢迎回来' }}</h2>
           <p class="welcome-text">{{ isRegister ? '加入我们的社区，探索更多可能' : '登录您的账号，继续您的旅程' }}</p>
@@ -131,6 +131,7 @@ import {
   Moon,
   Sunny
 } from '@element-plus/icons-vue'
+import Logo from '~/components/Logo.vue'
 
 definePageMeta({ layout: false })
 

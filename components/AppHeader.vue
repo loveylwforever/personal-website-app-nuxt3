@@ -3,8 +3,8 @@
     <header class="app-header">
       <div class="container">
         <div class="logo-container" @click="goHome" style="cursor:pointer;">
-          <div class="logo">JW</div>
-          <span class="logo-text">极物聊天</span>
+          <Logo style="width:32px;height:32px;" />
+          <span class="logo-text">某某软件</span>
         </div>
 
         <nav class="nav-menu" v-if="!isMobile">
@@ -23,16 +23,16 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item>
-                  <router-link to="/jiwu-circle" class="dropdown-link">极物圈</router-link>
+                  <router-link to="/jiwu-circle" class="dropdown-link">某某圈</router-link>
                 </el-dropdown-item>
                 <el-dropdown-item>
-                  <router-link to="/jiwu-chat-tauri" class="dropdown-link">极物聊天（Tauri）</router-link>
+                  <router-link to="/jiwu-chat-tauri" class="dropdown-link">某某软件（Tauri）</router-link>
                 </el-dropdown-item>
                 <el-dropdown-item>
-                  <router-link to="/jiwu-chat-electron" class="dropdown-link">极物聊天（Electron）</router-link>
+                  <router-link to="/jiwu-chat-electron" class="dropdown-link">某某软件（Electron）</router-link>
                 </el-dropdown-item>
                 <el-dropdown-item>
-                  <router-link to="/jiwu-admin" class="dropdown-link">极物后台系统</router-link>
+                  <router-link to="/jiwu-admin" class="dropdown-link">某某后台系统</router-link>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -99,8 +99,8 @@
         <div class="mobile-menu">
           <div class="mobile-menu-header">
             <div class="logo-container">
-              <div class="logo">JW</div>
-              <span class="logo-text">极物聊天</span>
+              <Logo style="width:32px;height:32px;" />
+              <span class="logo-text">某某软件</span>
             </div>
             <el-button class="close-button" @click="closeMobileMenu">
               <el-icon><Close /></el-icon>
@@ -123,10 +123,10 @@
             <transition name="slide-down">
               <div v-if="ecosystemMenuOpen" class="ecosystem-submenu">
                 <div class="submenu-container">
-                  <router-link to="/jiwu-circle" class="mobile-nav-item submenu-item" @click="closeMobileMenu">极物圈</router-link>
-                  <router-link to="/jiwu-chat-tauri" class="mobile-nav-item submenu-item" @click="closeMobileMenu">极物聊天（Tauri）</router-link>
-                  <router-link to="/jiwu-chat-electron" class="mobile-nav-item submenu-item" @click="closeMobileMenu">极物聊天（Electron）</router-link>
-                  <router-link to="/jiwu-admin" class="mobile-nav-item submenu-item" @click="closeMobileMenu">极物后台系统</router-link>
+                  <router-link to="/jiwu-circle" class="mobile-nav-item submenu-item" @click="closeMobileMenu">某某圈</router-link>
+                  <router-link to="/jiwu-chat-tauri" class="mobile-nav-item submenu-item" @click="closeMobileMenu">某某软件（Tauri）</router-link>
+                  <router-link to="/jiwu-chat-electron" class="mobile-nav-item submenu-item" @click="closeMobileMenu">某某软件（Electron）</router-link>
+                  <router-link to="/jiwu-admin" class="mobile-nav-item submenu-item" @click="closeMobileMenu">某某后台系统</router-link>
                 </div>
               </div>
             </transition>
@@ -210,7 +210,7 @@
                   
                   <div class="font-preview" :style="{'font-family': getFontFamily(currentFont as string)}">
                     <div class="font-preview-text">
-                      <p>字体预览：极物聊天</p>
+                      <p>字体预览：某某软件</p>
                       <p>The quick brown fox jumps over the lazy dog.</p>
                       <p>123456790</p>
                     </div>
@@ -238,6 +238,7 @@ import { Github, ThemeToggle } from '~/assets/icons'
 import { useLayoutStore } from '~/stores/layout'
 import { useThemeStore } from '~/stores/theme'
 import { useFontStore } from '~/stores/font'
+import Logo from '~/components/Logo.vue'
 
 const route = useRoute()
 const router = useRouter()

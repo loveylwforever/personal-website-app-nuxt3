@@ -122,3 +122,33 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - 支持自定义动画时长、透明度。
 - 支持移动端长按或手势触发。
 - 可扩展为全局指令，便于多处复用。
+
+## 全局 Logo 文字配置说明
+
+本项目的 Logo 组件（`components/Logo.vue`）支持全局统一设置 logo 文字，无需在每个页面单独传递。
+
+### 如何全局设置
+
+1. 打开 `nuxt.config.ts`，在 `runtimeConfig.public` 下设置 `logoText`：
+
+```ts
+export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      logoText: 'JW' // 全站 logo 文字
+    }
+  }
+})
+```
+
+2. 只需 `<Logo />`，logo 文字会自动读取全局配置。
+
+### 如何单独覆盖
+
+如需在某处显示不同 logo 文字，可直接传递 `text` 属性：
+
+```vue
+<Logo text="自定义" />
+```
+
+此时该 logo 只显示自定义文字，不受全局配置影响。

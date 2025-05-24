@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'default',
-  title: '极物聊天 - 定价'
+  title: '某某软件 - 定价'
 })
 
 import { Check } from '@element-plus/icons-vue'
@@ -42,7 +42,7 @@ const handleContact = () => {
             <ul class="features-list">
               <li>
                 <el-icon><Check /></el-icon>
-                基础聊天功能
+                基础某某功能
               </li>
               <li>
                 <el-icon><Check /></el-icon>

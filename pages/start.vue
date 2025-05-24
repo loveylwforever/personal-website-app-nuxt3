@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'default',
-  title: '极物聊天 - 开始'
+  title: '某某软件 - 开始'
 })
 
 import { Download } from '@element-plus/icons-vue'
@@ -91,7 +91,7 @@ const handleWebExperience = () => {
           <ol>
             <li>启动应用并注册/登录账号</li>
             <li>加入已有群聊或创建新的群聊</li>
-            <li>开始与好友聊天、体验 AI 助手等功能</li>
+            <li>开始与好友某某、体验 AI 助手等功能</li>
           </ol>
           <el-button type="primary" class="start-button" @click="handleWebExperience">
             立即体验 Web 版

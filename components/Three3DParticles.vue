@@ -10,11 +10,25 @@ const props = defineProps({
   theme: {
     type: String,
     default: 'dark',
-    validator: (value: string) => ['dark', 'light'].includes(value)
+    validator: (value: string) => ['dark', 'light', 'system'].includes(value)
   }
 })
 
 const container = ref<HTMLDivElement | null>(null)
+const effectiveTheme = ref(props.theme)
+let mediaQuery: MediaQueryList | null = null
+
+function updateSystemTheme() {
+  if (props.theme === 'system') {
+    effectiveTheme.value = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  } else {
+    effectiveTheme.value = props.theme
+  }
+}
+
+watch(() => props.theme, () => {
+  updateSystemTheme()
+})
 
 function initThree() {
   import('three').then(THREE => {
@@ -41,7 +55,7 @@ function initThree() {
     camera = new THREE.PerspectiveCamera(isMobile ? 65 : 70, width / height, 1, 1000)
     camera.position.z = isMobile ? 120 : 150
 
-    createParticles(THREE, props.theme)
+    createParticles(THREE, effectiveTheme.value)
 
     // 8. 改进动画循环，增加时间变量
     let time = 0
@@ -222,8 +236,8 @@ function createParticles(THREE: any, theme: string) {
   scene.add(points)
 }
 
-// 监听主题变化重新创建粒子
-watch(() => props.theme, (newTheme) => {
+// 监听 effectiveTheme 变化，动态切换粒子主题
+watch(effectiveTheme, (newTheme) => {
   if (typeof window !== 'undefined') {
     import('three').then(THREE => {
       createParticles(THREE, newTheme as string)
@@ -232,6 +246,11 @@ watch(() => props.theme, (newTheme) => {
 })
 
 onMounted(() => {
+  updateSystemTheme()
+  if (props.theme === 'system') {
+    mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    mediaQuery.addEventListener('change', updateSystemTheme)
+  }
   initThree()
   window.addEventListener('resize', handleResize)
 })
@@ -255,6 +274,9 @@ onUnmounted(() => {
     }
   }
   window.removeEventListener('resize', handleResize)
+  if (mediaQuery) {
+    mediaQuery.removeEventListener('change', updateSystemTheme)
+  }
 })
 </script>
 

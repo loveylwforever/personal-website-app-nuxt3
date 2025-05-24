@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'default',
-  title: '极物聊天 - 体验'
+  title: '某某软件 - 体验'
 })
 
 import { ref } from 'vue'
@@ -37,7 +37,7 @@ const handleLearnMore = () => {
   <div class="experience-page">
     <div class="container">
       <h1 class="page-title">在线体验</h1>
-      <p class="page-subtitle">无需下载，立即体验极物聊天的强大功能</p>
+      <p class="page-subtitle">无需下载，立即体验某某软件的强大功能</p>
       
       <div class="demo-section">
         <div class="demo-container">
@@ -47,7 +47,7 @@ const handleLearnMore = () => {
               <div class="control yellow"></div>
               <div class="control green"></div>
             </div>
-            <div class="demo-title">极物聊天 Web 版</div>
+            <div class="demo-title">某某软件 Web 版</div>
           </div>
           <div class="demo-content">
             <div class="loading-container" v-if="loading">
@@ -69,7 +69,7 @@ const handleLearnMore = () => {
             <el-icon class="feature-icon"><ChatDotRound /></el-icon>
             <div class="feature-content">
               <h3>即时通讯</h3>
-              <p>体验流畅的一对一聊天和群聊功能，支持文字、图片、文件等多种消息类型</p>
+              <p>体验流畅的一对一某某和群聊功能，支持文字、图片、文件等多种消息类型</p>
             </div>
           </div>
           

@@ -2,12 +2,19 @@
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+  <ClientOnly v-if="isDev">
+    <StagewiseToolbar :config="stagewiseConfig" />
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useThemeStore } from '~/stores/theme'
 import { useFontStore } from '~/stores/font'
+import { StagewiseToolbar } from '@stagewise/toolbar-vue'
+
+const stagewiseConfig = { plugins: [] }
+const isDev = process.env.NODE_ENV === 'development'
 
 // 在应用启动时初始化主题和字体
 onMounted(() => {

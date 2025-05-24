@@ -22,7 +22,7 @@ export default defineNuxtConfig({
   ],
   app: {
     head: {
-      title: '极物聊天 - 一个轻量的聊天软件',
+      title: '某某软件 - 一个轻量的某某软件',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -110,6 +110,7 @@ export default defineNuxtConfig({
     public: {
       homeLayout: '',
       siteName: '',
+      logoText: 'XX',
     }
   },
   nitro: {

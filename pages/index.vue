@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'default',
-  title: '极物聊天 - 首页'
+  title: '某某软件 - 首页'
 })
 
 import { computed, ref, onMounted, watch, onUnmounted } from 'vue'
@@ -54,7 +54,7 @@ const downloadOptions = [
 ]
 
 // 确保全文定义正确
-const fullText = '极物聊天'
+const fullText = '某某软件'
 
 // 打字机效果相关变量 (仅在默认布局中使用)
 const typewriterChars = ref<string[]>([])
@@ -324,7 +324,7 @@ onUnmounted(() => {
             <span class="type-char" :class="{ visible: typewriterVisible[i] }">{{ char }}</span>
           </template>
         </h1>
-        <p class="subtitle">一个轻量的聊天软件</p>
+        <p class="subtitle">一个轻量的某某软件</p>
         
         <div class="description">
           一款基于 Tauri2 和 Nuxt3 构建的轻量级（~ 8 MB）客户端即时通讯应用，配合 AI 群聊机器人（如 DeepSeek、讯飞星火）、WebRTC 音视频通话，屏幕共享和 AI 视频物服...
@@ -402,7 +402,7 @@ onUnmounted(() => {
                 </template>
               </h1>
             </div>
-            <h2 class="hero-tagline">一个轻量的聊天软件</h2>
+            <h2 class="hero-tagline">一个轻量的某某软件</h2>
             <p class="hero-description">
               一款基于 <span class="highlight">Tauri2</span> 和 <span class="highlight">Nuxt3</span> 
               构建的轻量级 (≈ 8 MB) 多平台即时通讯应用，配备 AI 群聊机器人（如 <span class="highlight">DeepSeek</span>、讯飞星火）、

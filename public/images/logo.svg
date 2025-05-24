@@ -7,12 +7,12 @@
     </linearGradient>
   </defs>
   
-  <!-- 聊天气泡形状 -->
+  <!-- 某某气泡形状 -->
   <path d="M50 10C27.91 10 10 25.91 10 45c0 10.12 4.76 19.26 12.36 25.83C21.39 78.01 16.4 85 10 90c12.32-2 20.58-6.23 25.42-10.27C39.59 82.15 44.63 83 50 83c22.09 0 40-15.91 40-38S72.09 10 50 10z" 
         fill="url(#logoGradient)" />
   
-  <!-- 文字 "JW" -->
-  <text x="50" y="56" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="white">JW</text>
+  <!-- 文字 "JW"，可通过 id 动态设置 -->
+  <text id="logoText" x="50" y="56" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="white">XX</text>
   
   <!-- 小圆点装饰 -->
   <circle cx="35" cy="45" r="4" fill="white" />
