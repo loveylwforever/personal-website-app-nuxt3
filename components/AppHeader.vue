@@ -8,31 +8,25 @@
         </div>
 
         <nav class="nav-menu" v-if="!isMobile">
-          <router-link to="/" class="nav-item" :class="{ active: route && route.path === '/' }">首页</router-link>
-          <router-link to="/start" class="nav-item">开始</router-link>
-          <router-link to="/pricing" class="nav-item">定价</router-link>
-          <router-link to="/experience" class="nav-item">体验</router-link>
-          <router-link to="/projects" class="nav-item">项目</router-link>
-          <router-link to="/message" class="nav-item">留言墙</router-link>
-          <router-link to="/changelog" class="nav-item">更新日志</router-link>
+          <NuxtLink to="/" class="nav-item" :class="{ active: route && route.path === '/' }">首页</NuxtLink>
+          <NuxtLink to="/start" class="nav-item">开始</NuxtLink>
+          <NuxtLink to="/pricing" class="nav-item">定价</NuxtLink>
+          <NuxtLink to="/experience" class="nav-item">体验</NuxtLink>
+          <NuxtLink to="/projects" class="nav-item">项目</NuxtLink>
+          <NuxtLink to="/message" class="nav-item">留言墙</NuxtLink>
+          <NuxtLink to="/changelog" class="nav-item">更新日志</NuxtLink>
           <el-dropdown trigger="hover" class="nav-dropdown">
-            <span class="nav-item dropdown-trigger">
+            <span class="nav-item dropdown-trigger" @click="onEcosystemTriggerClick">
               生态
               <el-icon><ArrowDown /></el-icon>
             </span>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item>
-                  <router-link to="/jiwu-circle" class="dropdown-link">某某圈</router-link>
+                  <NuxtLink to="/forum" class="dropdown-link full-link">某某圈</NuxtLink>
                 </el-dropdown-item>
                 <el-dropdown-item>
-                  <router-link to="/jiwu-chat-tauri" class="dropdown-link">某某软件（Tauri）</router-link>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <router-link to="/jiwu-chat-electron" class="dropdown-link">某某软件（Electron）</router-link>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                  <router-link to="/jiwu-admin" class="dropdown-link">某某后台系统</router-link>
+                  <NuxtLink to="/jiwu-admin" class="dropdown-link">某某后台系统</NuxtLink>
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -80,19 +74,6 @@
       </div>
     </header>
 
-    <!-- Announcement Banner -->
-    <div class="announcement-banner">
-      <div class="update-tag" @click="openChangelog">
-        <span class="version">✨ 0.0.0</span>
-        <span class="divider">|</span>
-        <span class="message">修复问题，优化用户体验，体验更流畅！🚀</span>
-        <div class="action">
-          <span class="view-changelog">查看更新日志</span>
-          <el-icon class="arrow-icon"><ArrowRight /></el-icon>
-        </div>
-      </div>
-    </div>
-
     <!-- Mobile Menu (moved outside of header) -->
     <teleport to="body">
       <div v-if="isMobile && mobileMenuOpen" class="mobile-menu-overlay" @click.self="closeMobileMenu">
@@ -107,13 +88,13 @@
             </el-button>
           </div>
           <div class="mobile-menu-container">
-            <router-link to="/" class="mobile-nav-item" @click="closeMobileMenu">首页</router-link>
-            <router-link to="/start" class="mobile-nav-item" @click="closeMobileMenu">开始</router-link>
-            <router-link to="/pricing" class="mobile-nav-item" @click="closeMobileMenu">定价</router-link>
-            <router-link to="/experience" class="mobile-nav-item" @click="closeMobileMenu">体验</router-link>
-            <router-link to="/projects" class="mobile-nav-item" @click="closeMobileMenu">项目</router-link>
-            <router-link to="/message" class="mobile-nav-item" @click="closeMobileMenu">留言</router-link>
-            <router-link to="/changelog" class="mobile-nav-item" @click="closeMobileMenu">更新日志</router-link>
+            <NuxtLink to="/" class="mobile-nav-item" @click="closeMobileMenu">首页</NuxtLink>
+            <NuxtLink to="/start" class="mobile-nav-item" @click="closeMobileMenu">开始</NuxtLink>
+            <NuxtLink to="/pricing" class="mobile-nav-item" @click="closeMobileMenu">定价</NuxtLink>
+            <NuxtLink to="/experience" class="mobile-nav-item" @click="closeMobileMenu">体验</NuxtLink>
+            <NuxtLink to="/projects" class="mobile-nav-item" @click="closeMobileMenu">项目</NuxtLink>
+            <NuxtLink to="/message" class="mobile-nav-item" @click="closeMobileMenu">留言</NuxtLink>
+            <NuxtLink to="/changelog" class="mobile-nav-item" @click="closeMobileMenu">更新日志</NuxtLink>
             
             <div class="mobile-nav-item dropdown" @click="toggleEcosystemMenu">
               生态
@@ -123,10 +104,8 @@
             <transition name="slide-down">
               <div v-if="ecosystemMenuOpen" class="ecosystem-submenu">
                 <div class="submenu-container">
-                  <router-link to="/jiwu-circle" class="mobile-nav-item submenu-item" @click="closeMobileMenu">某某圈</router-link>
-                  <router-link to="/jiwu-chat-tauri" class="mobile-nav-item submenu-item" @click="closeMobileMenu">某某软件（Tauri）</router-link>
-                  <router-link to="/jiwu-chat-electron" class="mobile-nav-item submenu-item" @click="closeMobileMenu">某某软件（Electron）</router-link>
-                  <router-link to="/jiwu-admin" class="mobile-nav-item submenu-item" @click="closeMobileMenu">某某后台系统</router-link>
+                  <NuxtLink to="/forum" class="mobile-nav-item submenu-item" @click="closeMobileMenu">某某圈</NuxtLink>
+                  <NuxtLink to="/jiwu-admin" class="mobile-nav-item submenu-item" @click="closeMobileMenu">某某后台系统</NuxtLink>
                 </div>
               </div>
             </transition>
@@ -389,6 +368,13 @@ function onThemeToggle(e: MouseEvent) {
   // 直接切换主题
   themeStore.toggleTheme()
   rippleLock.value = false
+}
+
+function onEcosystemTriggerClick(event: MouseEvent) {
+  // If the click is on the dropdown arrow, do nothing (let dropdown open)
+  const arrow = (event.target as HTMLElement).closest('.el-icon');
+  if (arrow) return;
+  router.push('/forum');
 }
 </script>
 
@@ -1251,5 +1237,11 @@ function onThemeToggle(e: MouseEvent) {
   .settings-section {
     padding: 16px;
   }
+}
+
+.dropdown-link.full-link {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
 </style>

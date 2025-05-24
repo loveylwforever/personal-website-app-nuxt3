@@ -14,6 +14,7 @@ import { ElMessage } from 'element-plus/es/components/message'
 import { useRouter } from 'vue-router'
 import { detectOS, getPreferredDownloadPlatform, getPlatformDisplay, getPlatformButtonClass, type Platform } from '~/utils/platformDetect'
 import Three3DParticles from '~/components/Three3DParticles.vue'
+import AnnouncementBanner from '~/components/AnnouncementBanner.vue'
 
 const layoutStore = useLayoutStore()
 const router = useRouter()
@@ -316,6 +317,7 @@ onUnmounted(() => {
 
 <template>
   <div :class="[isAlternativeLayout ? 'home-centered' : 'home-page']">
+    <AnnouncementBanner />
     <!-- 居中布局(alternative) -->
     <template v-if="isAlternativeLayout">
       <div class="hero-section">

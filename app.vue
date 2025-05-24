@@ -1,10 +1,20 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
-  <ClientOnly v-if="isDev">
-    <StagewiseToolbar :config="stagewiseConfig" />
+  <ClientOnly>
+    <GlobalLoading v-if="!isAppReady" />
   </ClientOnly>
+  <template v-if="isAppReady">
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+    <ClientOnly v-if="isDev">
+      <StagewiseToolbar :config="stagewiseConfig" />
+    </ClientOnly>
+    <div v-if="!route.path.startsWith('/forum')">
+      <div class="announcement-banner">
+        <!-- ...原有内容... -->
+      </div>
+    </div>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -12,17 +22,22 @@ import { onMounted, ref } from 'vue'
 import { useThemeStore } from '~/stores/theme'
 import { useFontStore } from '~/stores/font'
 import { StagewiseToolbar } from '@stagewise/toolbar-vue'
+import GlobalLoading from '~/components/GlobalLoading.vue'
+import { useRoute } from 'vue-router'
 
 const stagewiseConfig = { plugins: [] }
 const isDev = process.env.NODE_ENV === 'development'
+const isAppReady = ref(false)
+const route = useRoute()
 
-// 在应用启动时初始化主题和字体
-onMounted(() => {
+onMounted(async () => {
   const themeStore = useThemeStore()
-  themeStore.initTheme()
-  
   const fontStore = useFontStore()
-  fontStore.initFont()
+  await Promise.all([
+    themeStore.initTheme(),
+    fontStore.initFont(),
+  ])
+  isAppReady.value = true
 })
 
 // 字体测试面板

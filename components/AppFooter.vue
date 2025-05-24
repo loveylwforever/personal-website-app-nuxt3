@@ -32,9 +32,7 @@
           
           <div class="link-group">
             <h3>生态</h3>
-            <NuxtLink to="/jiwu-circle">某某圈</NuxtLink>
-            <NuxtLink to="/jiwu-chat-tauri">某某软件（Tauri）</NuxtLink>
-            <NuxtLink to="/jiwu-chat-electron">某某软件（Electron）</NuxtLink>
+            <NuxtLink to="/forum">某某圈</NuxtLink>
             <NuxtLink to="/jiwu-admin">某某后台系统</NuxtLink>
           </div>
           

@@ -42,11 +42,11 @@ const fontConfig = {
 
 export const useFontStore = defineStore('font', {
   state: () => ({
-    currentFont: 'default',
-    // 从配置中提取可用字体列表
-    availableFonts: Object.values(fontConfig).map(font => ({ id: font.id, name: font.name })) as unknown as FontOption[],
+    currentFont: 'default'
   }),
-
+  getters: {
+    availableFonts: () => Object.values(fontConfig).map(font => ({ id: font.id, name: font.name })) as FontOption[]
+  },
   actions: {
     setFont(fontId: string) {
       // 确保选择的字体在可用字体列表中

@@ -100,6 +100,8 @@
 </template>
 
 <script setup lang="ts">
+import AnnouncementBanner from '~/components/AnnouncementBanner.vue'
+
 definePageMeta({
   layout: 'default',
   title: '某某软件 - 更新日志'
