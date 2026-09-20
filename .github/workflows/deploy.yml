@@ -21,11 +21,5 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Pull Vercel environment
-        run: vercel pull --yes --environment=${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && 'production' || 'preview' }}
-
-      - name: Build
-        run: vercel build ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && '--prod' || '' }}
-
-      - name: Deploy
-        run: vercel deploy --prebuilt ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && '--prod' || '' }}
+      - name: Deploy to Vercel
+        run: vercel deploy --yes ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && '--prod' || '' }}
