@@ -118,7 +118,7 @@ export default defineNuxtConfig({
       gzip: true,
       brotli: true
     },
-    minify: true,
+    minify: false,
     routeRules: {
       // 缓存静态资源
       '/images/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
