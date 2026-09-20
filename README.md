@@ -1,4 +1,4 @@
-# JiWu Chat Clone
+# 某某软件
 
 A modern chat application clone built with Nuxt 3, featuring a beautiful and responsive design with multiple layout options.
 
@@ -22,7 +22,7 @@ A modern chat application clone built with Nuxt 3, featuring a beautiful and res
 1. Clone the repository:
 ```bash
 git clone [repository-url]
-cd jiwu-chat-clone
+cd personal-website-app-nuxt3
 ```
 
 2. Install dependencies:

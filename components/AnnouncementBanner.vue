@@ -1,91 +1,130 @@
+<script setup lang="ts">
+function openChangelog() {
+  navigateTo('/changelog')
+}
+</script>
+
 <template>
   <div class="announcement-banner">
-    <div class="update-tag" @click="openChangelog">
-      <span class="version">✨ 0.0.0</span>
-      <span class="divider">|</span>
-      <span class="message">修复问题，优化用户体验，体验更流畅！🚀</span>
-      <div class="action">
-        <span class="view-changelog">查看更新日志</span>
-        <el-icon class="arrow-icon"><ArrowRight /></el-icon>
-      </div>
+    <div class="container">
+      <button type="button" class="update-tag" @click="openChangelog">
+        <span class="version">
+          <AppIcon name="sparkle" :size="14" />
+          0.0.0
+        </span>
+        <span class="divider" aria-hidden="true">|</span>
+        <span class="message">修复问题，优化用户体验，体验更流畅</span>
+        <AppIcon name="rocket" class="rocket" :size="16" />
+        <span class="action">
+          查看更新日志
+          <AppIcon name="arrow-right" class="action-arrow" :size="12" />
+        </span>
+      </button>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ArrowRight } from '@element-plus/icons-vue'
-import { useRouter } from 'vue-router'
-const router = useRouter()
-function openChangelog() {
-  router.push('/changelog')
-}
-</script>
-
 <style scoped>
 .announcement-banner {
-  position: relative;
-  padding: 66px 16px;
+  padding-top: 24px;
+}
+
+.announcement-banner .container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  background: transparent;
-  backdrop-filter: blur(10px);
 }
+
 .update-tag {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 16px;
-  border-radius: 6px;
-  border: 1px solid rgba(234, 179, 8, 0.3);
-  background: rgba(234, 179, 8, 0.05);
+  width: max-content;
+  max-width: 100%;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--primary-color) 28%, var(--border-color));
+  background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+  color: var(--text-color);
+  font: inherit;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 200px;
-  max-width: 800px;
-  margin: 0 auto;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
 }
-.update-tag:hover {
-  background: rgba(234, 179, 8, 0.1);
-  border-color: rgba(234, 179, 8, 0.5);
-  transform: translateY(-1px);
-}
-.version {
-  color: #EAB308;
-  font-weight: 500;
+
+.version,
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary-color);
   white-space: nowrap;
-  flex-shrink: 0;
 }
+
+.action {
+  font-size: 12px;
+}
+
 .divider {
-  color: rgba(234, 179, 8, 0.4);
-  margin: 0 4px;
-  flex-shrink: 0;
+  color: color-mix(in srgb, var(--primary-color) 40%, var(--text-tertiary));
 }
+
 .message {
-  color: var(--text-color);
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  min-width: 0;
-  flex: 1;
-  text-align: left;
 }
-.action {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: 12px;
+
+.rocket,
+.action-arrow {
   flex-shrink: 0;
+  color: var(--primary-color);
+  transition: transform 160ms ease;
 }
-.view-changelog {
-  color: rgba(234, 179, 8, 0.8);
-  font-size: 12px;
-  white-space: nowrap;
+
+@media (hover: hover) and (pointer: fine) {
+  .update-tag:hover {
+    background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+    border-color: color-mix(in srgb, var(--primary-color) 48%, var(--border-color));
+    box-shadow: var(--shadow-whisper);
+    transform: translateY(-1px);
+  }
+
+  .update-tag:hover .rocket {
+    transform: translate(2px, -3px) rotate(-12deg);
+  }
+
+  .update-tag:hover .action-arrow {
+    transform: translateX(4px);
+  }
 }
-.arrow-icon {
-  font-size: 12px;
-  color: rgba(234, 179, 8, 0.8);
-  transition: transform 0.2s ease;
+
+.update-tag:active {
+  transform: scale(0.97);
 }
-</style> 
+
+@media (prefers-reduced-motion: reduce) {
+  .update-tag,
+  .rocket,
+  .action-arrow {
+    transition: background-color 160ms ease, border-color 160ms ease;
+  }
+
+  .update-tag:hover,
+  .update-tag:hover .rocket,
+  .update-tag:hover .action-arrow,
+  .update-tag:active {
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .update-tag {
+    font-size: 12px;
+  }
+}
+</style>

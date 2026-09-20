@@ -5,17 +5,19 @@ export default defineNuxtConfig({
   },
   modules: [
     "@pinia/nuxt",
-    "@element-plus/nuxt",
     "@vueuse/nuxt",
-    "@nuxtjs/tailwindcss",
     "@nuxtjs/color-mode",
+  ],
+  components: [
+    { path: "~/components/ui", pathPrefix: false },
+    { path: "~/components/home", pathPrefix: false },
+    { path: "~/components/header", pathPrefix: false },
+    "~/components",
   ],
   css: [
     "@/assets/scss/fonts.scss",
     "@/assets/scss/themes.scss",
     "@/assets/scss/global.scss",
-    "@/assets/scss/element-theme.scss",
-    "@/assets/scss/element-overrides.scss",
   ],
   app: {
     head: {
@@ -40,10 +42,6 @@ export default defineNuxtConfig({
     classSuffix: "",
     storageKey: "theme",
   },
-  elementPlus: {
-    importStyle: "scss",
-    themes: ["dark"],
-  },
   runtimeConfig: {
     public: {
       siteName: "某某软件",
@@ -54,15 +52,11 @@ export default defineNuxtConfig({
     strict: true,
     typeCheck: false,
   },
-  build: {
-    transpile: ["element-plus"],
-  },
   vite: {
     ssr: {
       resolve: {
         conditions: ["import", "module", "default"],
       },
-      noExternal: ["element-plus", "@element-plus/icons-vue"],
     },
   },
   nitro: {

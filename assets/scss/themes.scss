@@ -11,11 +11,25 @@
   --primary-color: #c96442;
   --primary-dark: #b95536;
   --primary-light: #d97757;
+  --on-primary: #faf9f5;
+  --danger: #b53333;
+  --ring: #d1cfc5;
   --gradient-start: #c96442;
   --gradient-start-rgb: 201, 100, 66;
   --gradient-end: #d97757;
   --gradient-end-rgb: 217, 119, 87;
   --current-font-family: var(--font-family-default);
+
+  --page-max: 1120px;
+  --page-narrow: 760px;
+  --page-gutter: 24px;
+  --page-y: 72px;
+  --header-height: 64px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-whisper: 0 4px 24px rgb(0 0 0 / 5%);
+  --shadow-lift: 0 12px 32px rgb(0 0 0 / 8%);
 }
 
 html.dark {
@@ -28,4 +42,15 @@ html.dark {
   --card-bg: #30302e;
   --header-bg: color-mix(in srgb, #141413 90%, transparent);
   --hover-bg: color-mix(in srgb, #faf9f5 6%, transparent);
+  --ring: #3d3d3a;
+  --shadow-whisper: 0 4px 24px rgb(0 0 0 / 28%);
+  --shadow-lift: 0 12px 32px rgb(0 0 0 / 36%);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --page-gutter: 16px;
+    --page-y: 40px;
+    --header-height: 56px;
+  }
 }

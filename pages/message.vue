@@ -212,19 +212,12 @@ function animateBarrages() {
 .message-wall {
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
   z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  &.dark {
-    background: #121418;
-  }
-  &.light {
-    background: #f6f7f4;
-  }
+  overflow: hidden;
+  background: var(--bg-color);
 }
 .barrage-container {
   position: absolute;
@@ -238,29 +231,24 @@ function animateBarrages() {
   height: 44px;
   padding: 0 16px;
   border-radius: 14px;
-  color: #fff;
+  color: var(--text-color);
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 16px;
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+  box-shadow: var(--shadow-whisper);
   pointer-events: auto;
   user-select: none;
-  background: rgba(20, 22, 28, 0.82);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   will-change: transform, left;
-  &.light {
-    background: rgba(255,255,255,0.9);
-    color: #141413;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
-    border: 1px solid rgba(31, 35, 40, 0.12);
-  }
 }
 .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
-  background: #fff;
+  background: var(--card-bg);
 }
 .nickname {
   font-weight: bold;
@@ -275,48 +263,37 @@ function animateBarrages() {
   white-space: nowrap;
 }
 .input-bar {
-  width: 100vw;
-  padding: 24px 0 32px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
-  background: linear-gradient(0deg, rgba(18,20,24,0.74) 0%, rgba(18,20,24,0.0) 100%);
-  &.light {
-    background: linear-gradient(0deg, rgba(246,247,244,0.9) 0%, rgba(246,247,244,0.0) 100%);
-  }
+  width: 100%;
+  padding: 24px var(--page-gutter) 32px;
+  background: linear-gradient(0deg, var(--bg-color) 0%, transparent 100%);
 }
 .input-bar input {
   width: 220px;
   height: 40px;
-  border-radius: 12px;
-  border: 1px solid rgba(31, 35, 40, 0.14);
+  padding: 0 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
   outline: none;
-  padding: 0 20px;
+  background: var(--card-bg);
+  color: var(--text-color);
   font-size: 16px;
-  background: #fff;
-  color: #222;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
-  margin-right: 8px;
 }
 .input-bar button {
   height: 40px;
-  border-radius: 12px;
-  border: none;
-  background: #c96442;
-  color: #fff;
-  font-weight: bold;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--primary-color);
+  color: var(--on-primary);
   font-size: 16px;
-  padding: 0 24px;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 0 0 1px #c96442;
-  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-.input-bar button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 0 1px #d1cfc5;
 }
 @media (max-width: 600px) {
   .barrage-item {
