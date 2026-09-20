@@ -23,5 +23,8 @@ logs
 .env.*
 !.env.example
 
+# Local design notes
+DESIGN.md
+
 # Vercel
 .vercel

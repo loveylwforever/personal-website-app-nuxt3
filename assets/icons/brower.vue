@@ -1,5 +1,5 @@
 <template>
-    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="42px" height="42px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" class="browser-icon">
+    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16" height="16" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" class="browser-icon">
 <g id="BROWSER_1_" enable-background="new    ">
 	<g id="BROWSER">
 		<g>
@@ -12,9 +12,10 @@
 
 <style lang="scss" scoped>
 .browser-icon {
+  display: block;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
   fill: currentColor;
-  transition: fill 0.3s ease;
-  transform: scale(1.2);
-  transform-origin: center;
 }
 </style>

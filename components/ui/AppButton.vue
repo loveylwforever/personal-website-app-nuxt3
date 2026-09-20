@@ -55,6 +55,14 @@ withDefaults(defineProps<{
   padding: 0 16px;
 }
 
+.app-btn--primary :deep(svg),
+.app-btn--secondary :deep(svg),
+.app-btn--ghost :deep(svg) {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
 .app-btn--primary {
   background: var(--primary-color);
   color: var(--on-primary);
