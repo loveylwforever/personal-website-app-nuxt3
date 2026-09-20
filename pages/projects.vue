@@ -127,7 +127,7 @@ function visitProject(id: string) {
 <style lang="scss" scoped>
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 32px;
   margin-bottom: 64px;
 }
@@ -145,21 +145,27 @@ function visitProject(id: string) {
 .project-header {
   display: flex;
   align-items: center;
-  gap: 16px;
+  flex-wrap: nowrap;
+  gap: 10px;
   margin-bottom: 16px;
 }
 
 .project-header h3 {
   margin: 0;
+  min-width: 0;
   font-size: 20px;
+  line-height: 1.3;
+  white-space: nowrap;
 }
 
 .project-badge {
+  flex-shrink: 0;
   padding: 2px 10px;
   border-radius: var(--radius-sm);
   background: var(--primary-color);
   color: var(--on-primary);
   font-size: 12px;
+  white-space: nowrap;
 }
 
 .project-description {
@@ -225,6 +231,12 @@ function visitProject(id: string) {
 .stat-label {
   color: var(--text-secondary);
   font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 </style>
