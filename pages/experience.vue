@@ -22,7 +22,7 @@ function handleLearnMore() {
       <p class="page-subtitle">无需下载，立即体验某某软件的强大功能</p>
 
       <div class="demo-section">
-        <div class="demo-container page-card">
+        <div class="demo-container page-card lift-card reveal">
           <div class="demo-header">
             <div class="demo-controls">
               <div class="control red"></div>
@@ -40,28 +40,28 @@ function handleLearnMore() {
         </div>
 
         <div class="features-list">
-          <div class="feature-item page-card">
+          <div class="feature-item page-card lift-card reveal" style="--reveal-delay: 40ms">
             <AppIcon name="chat" class="feature-icon" :size="24" />
             <div>
               <h3>即时通讯</h3>
               <p>体验流畅的一对一某某和群聊功能，支持文字、图片、文件等多种消息类型</p>
             </div>
           </div>
-          <div class="feature-item page-card">
+          <div class="feature-item page-card lift-card reveal" style="--reveal-delay: 80ms">
             <AppIcon name="robot" class="feature-icon" :size="24" />
             <div>
               <h3>AI 助手</h3>
               <p>尝试与智能 AI 助手对话，体验 DeepSeek、讯飞星火等大模型的强大能力</p>
             </div>
           </div>
-          <div class="feature-item page-card">
+          <div class="feature-item page-card lift-card reveal" style="--reveal-delay: 120ms">
             <AppIcon name="video" class="feature-icon" :size="24" />
             <div>
               <h3>音视频通话</h3>
               <p>测试高清视频通话和语音通话功能，体验流畅的实时通讯体验</p>
             </div>
           </div>
-          <div class="feature-item page-card">
+          <div class="feature-item page-card lift-card reveal" style="--reveal-delay: 160ms">
             <AppIcon name="monitor" class="feature-icon" :size="24" />
             <div>
               <h3>屏幕共享</h3>
@@ -71,7 +71,7 @@ function handleLearnMore() {
         </div>
       </div>
 
-      <div class="cta-section page-card">
+      <div class="cta-section page-card lift-card reveal" style="--reveal-delay: 80ms">
         <h2 class="page-section-title">准备好了吗？</h2>
         <p>下载桌面客户端，享受更完整的功能体验</p>
         <div class="cta-buttons">

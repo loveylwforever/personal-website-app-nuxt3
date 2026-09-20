@@ -6,8 +6,8 @@
         <p class="page-subtitle page-subtitle--start post-meta">
           作者 {{ post.author }} · 发表于 {{ post.createdAt }} · 浏览 {{ post.views }} · 最后活动 {{ post.lastActiveAt }}
         </p>
-        <div class="post-content page-card">{{ post.content }}</div>
-        <div class="comments-block page-card">
+        <div class="post-content page-card lift-card reveal">{{ post.content }}</div>
+        <div class="comments-block page-card lift-card reveal" style="--reveal-delay: 60ms">
           <h2 class="page-section-title">全部回复（{{ post.comments.length }}）</h2>
           <div v-if="post.comments.length === 0" class="empty">暂无回复</div>
           <div v-for="comment in post.comments" :key="comment.id" class="comment">

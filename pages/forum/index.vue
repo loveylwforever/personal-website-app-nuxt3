@@ -5,7 +5,7 @@
       <p class="page-subtitle">分享使用心得，交流技术经验</p>
 
       <div class="forum-layout">
-        <aside class="forum-sidebar page-card">
+        <aside class="forum-sidebar page-card lift-card reveal">
           <div class="sidebar-section">
             <div class="sidebar-title">导航</div>
             <ul class="sidebar-list">
@@ -41,7 +41,7 @@
             </div>
           </div>
 
-          <div class="forum-table page-card">
+          <div class="forum-table page-card reveal" style="--reveal-delay: 60ms">
             <div class="forum-table-header">
               <span class="col-topic">主题</span>
               <span class="col-replies">回复</span>
@@ -215,8 +215,24 @@ const sortedPosts = computed(() =>
   border-bottom: 0;
 }
 
+.forum-table-row {
+  transition: background-color var(--duration-fast) ease, transform var(--duration-fast) var(--ease-out);
+}
+
 .forum-table-row:hover {
   background: var(--hover-bg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .forum-table-row:hover {
+    transform: translateX(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .forum-table-row:hover {
+    transform: none;
+  }
 }
 
 .col-topic {

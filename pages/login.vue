@@ -10,7 +10,7 @@
       </ClientOnly>
     </div>
     <div class="login-right">
-      <div class="login-card">
+      <div class="login-card hero-rise">
         <!-- 主题切换开关 -->
         <div class="theme-toggle" @click="themeStore.toggleTheme">
           <AppIcon :name="themeStore.isDark ? 'sun' : 'moon'" />

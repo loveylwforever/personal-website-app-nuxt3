@@ -23,7 +23,7 @@ const items = [
 <template>
   <div class="hero-centered">
     <div class="container">
-      <div class="hero-centered__copy">
+      <div class="hero-centered__copy hero-rise">
         <h1>
           <HomeTypewriter :chars="chars" :visible="visible" />
         </h1>
@@ -44,7 +44,7 @@ const items = [
         </div>
         <button type="button" class="more-link" @click="emit('more')">其他版本下载</button>
       </div>
-      <div class="hero-centered__media">
+      <div class="hero-centered__media hero-rise-late">
         <HomeScreenshot />
       </div>
     </div>

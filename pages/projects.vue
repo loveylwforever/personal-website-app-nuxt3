@@ -77,7 +77,12 @@ function visitProject(id: string) {
       <p class="page-subtitle">探索某某生态的其他优秀项目</p>
       
       <div class="projects-grid">
-        <article v-for="project in projects" :key="project.id" class="project-card">
+        <article
+          v-for="(project, i) in projects"
+          :key="project.id"
+          class="project-card lift-card reveal"
+          :style="{ '--reveal-delay': `${i * 50}ms` }"
+        >
           <div class="project-header">
             <h3>{{ project.title }}</h3>
             <div class="project-badge">{{ project.badge }}</div>
@@ -95,7 +100,7 @@ function visitProject(id: string) {
         </article>
       </div>
       
-      <div class="ecosystem-section">
+      <div class="ecosystem-section lift-card reveal" style="--reveal-delay: 80ms">
         <h2 class="page-section-title">生态系统</h2>
         <p>我们正在构建一个完整的即时通讯生态系统，欢迎加入我们</p>
         <div class="ecosystem-stats">

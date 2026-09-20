@@ -126,6 +126,7 @@ function onKeydown(event: KeyboardEvent) {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-out);
 }
 
 .nav-menu {
@@ -149,6 +150,7 @@ function onKeydown(event: KeyboardEvent) {
   font-size: 14px;
   text-decoration: none;
   cursor: pointer;
+  transition: color var(--duration-fast) ease;
 }
 
 .nav-menu > a:hover,
@@ -157,8 +159,7 @@ function onKeydown(event: KeyboardEvent) {
   color: var(--text-color);
 }
 
-.nav-menu > a:hover::after,
-.nav-menu > a.router-link-active::after {
+.nav-menu > a::after {
   content: '';
   position: absolute;
   right: 0;
@@ -167,12 +168,38 @@ function onKeydown(event: KeyboardEvent) {
   height: 2px;
   border-radius: 2px;
   background: var(--text-color);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.nav-menu > a:hover::after,
+.nav-menu > a.router-link-active::after {
+  transform: scaleX(1);
 }
 
 .header-actions {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .logo-btn:hover {
+    transform: translateY(-1px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-btn,
+  .nav-menu > a,
+  .nav-menu > a::after {
+    transition: none;
+  }
+
+  .logo-btn:hover {
+    transform: none;
+  }
 }
 
 .search-input {

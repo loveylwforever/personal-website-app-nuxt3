@@ -45,7 +45,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteName: "某某软件",
-      logoText: "XX",
     },
   },
   typescript: {

@@ -22,7 +22,7 @@ const desktopItems = [
 <template>
   <main class="hero-default">
     <div class="container hero-default__grid">
-      <div class="hero-default__copy">
+      <div class="hero-default__copy hero-rise">
         <h1>
           <HomeTypewriter :chars="chars" :visible="visible" />
         </h1>
@@ -45,7 +45,7 @@ const desktopItems = [
         </div>
         <button type="button" class="more-link" @click="emit('more')">其他版本下载</button>
       </div>
-      <div class="hero-default__media">
+      <div class="hero-default__media hero-rise-late">
         <HomeScreenshot />
       </div>
     </div>

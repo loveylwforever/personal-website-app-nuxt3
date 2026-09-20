@@ -36,16 +36,16 @@ withDefaults(defineProps<{
   line-height: 1;
   white-space: nowrap;
   border-radius: var(--radius-md);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) ease,
+    background-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
 }
 
 .app-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-.app-btn:not(:disabled):active {
-  transform: translateY(1px) scale(0.98);
 }
 
 .app-btn--primary,
@@ -73,6 +73,13 @@ withDefaults(defineProps<{
   box-shadow: 0 0 0 1px var(--ring);
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .app-btn--primary:hover:not(:disabled),
+  .app-btn--ghost:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+}
+
 .app-btn--secondary {
   background: var(--bg-darker);
   color: var(--text-color);
@@ -98,5 +105,16 @@ withDefaults(defineProps<{
   color: var(--text-color);
   box-shadow: 0 0 0 1px var(--ring);
   border-color: var(--ring);
+}
+
+.app-btn:not(:disabled):active {
+  transform: translateY(1px) scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-btn--primary:hover:not(:disabled),
+  .app-btn--ghost:hover:not(:disabled) {
+    transform: none;
+  }
 }
 </style>

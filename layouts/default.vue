@@ -1,10 +1,15 @@
 <template>
-  <div class="default-layout">
+  <div ref="root" class="default-layout">
     <AppHeader />
     <slot />
     <AppFooter />
   </div>
 </template>
+
+<script setup lang="ts">
+const root = ref<HTMLElement | null>(null)
+useReveal(root)
+</script>
 
 <style scoped>
 .default-layout {

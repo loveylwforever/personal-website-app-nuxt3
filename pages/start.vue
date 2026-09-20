@@ -27,7 +27,7 @@ const platforms = [
       <h1 class="page-title">开始使用</h1>
       
       <div class="installation-steps">
-        <div class="step-card">
+        <div class="step-card lift-card reveal">
           <div class="step-number">1</div>
           <h3>下载安装包</h3>
           <p>选择适合您系统的安装包下载：</p>
@@ -39,7 +39,7 @@ const platforms = [
           </div>
         </div>
         
-        <div class="step-card">
+        <div class="step-card lift-card reveal" style="--reveal-delay: 60ms">
           <div class="step-number">2</div>
           <h3>安装应用</h3>
           <p>根据您的操作系统，按照以下步骤安装：</p>
@@ -71,7 +71,7 @@ const platforms = [
           </div>
         </div>
         
-        <div class="step-card">
+        <div class="step-card lift-card reveal" style="--reveal-delay: 120ms">
           <div class="step-number">3</div>
           <h3>开始使用</h3>
           <p>完成安装后：</p>
@@ -89,7 +89,7 @@ const platforms = [
       <div class="requirements">
         <h2 class="page-section-title">系统要求</h2>
         <div class="requirements-grid">
-          <div class="requirement-card">
+          <div class="requirement-card lift-card reveal">
             <h4>Windows</h4>
             <ul>
               <li>Windows 10/11 64位</li>
@@ -97,7 +97,7 @@ const platforms = [
               <li>500MB 存储空间</li>
             </ul>
           </div>
-          <div class="requirement-card">
+          <div class="requirement-card lift-card reveal" style="--reveal-delay: 50ms">
             <h4>macOS</h4>
             <ul>
               <li>macOS 11.0 或更高</li>
@@ -105,7 +105,7 @@ const platforms = [
               <li>500MB 存储空间</li>
             </ul>
           </div>
-          <div class="requirement-card">
+          <div class="requirement-card lift-card reveal" style="--reveal-delay: 100ms">
             <h4>Linux</h4>
             <ul>
               <li>Ubuntu 20.04 或其他主流发行版</li>

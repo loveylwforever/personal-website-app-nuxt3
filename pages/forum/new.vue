@@ -4,7 +4,7 @@
       <h1 class="page-title">发新帖</h1>
       <p class="page-subtitle">与社区分享你的想法或问题</p>
 
-      <form class="post-form page-card" @submit.prevent="submitPost">
+      <form class="post-form page-card lift-card reveal" @submit.prevent="submitPost">
         <label>
           标题
           <AppInput v-model="title" placeholder="请输入标题" />

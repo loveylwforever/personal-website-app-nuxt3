@@ -55,7 +55,13 @@ function handlePlan(id: string) {
       <p class="page-subtitle">选择最适合您的计划</p>
       
       <div class="pricing-grid">
-        <article v-for="plan in plans" :key="plan.id" class="pricing-card" :class="plan.id">
+        <article
+          v-for="(plan, i) in plans"
+          :key="plan.id"
+          class="pricing-card lift-card reveal"
+          :class="plan.id"
+          :style="{ '--reveal-delay': `${i * 60}ms` }"
+        >
           <div v-if="plan.popular" class="popular-badge">最受欢迎</div>
           <header>
             <h3>{{ plan.name }}</h3>

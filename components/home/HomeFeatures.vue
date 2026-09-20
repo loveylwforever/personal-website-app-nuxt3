@@ -14,7 +14,11 @@ const features = [
     <div class="container">
       <h2 class="page-section-title">功能特点</h2>
       <div class="home-features__grid">
-        <article v-for="item in features" :key="item.title" class="feature-card">
+        <article
+          v-for="item in features"
+          :key="item.title"
+          class="feature-card lift-card"
+        >
           <h3>{{ item.title }}</h3>
           <p>{{ item.body }}</p>
         </article>
@@ -44,11 +48,6 @@ const features = [
   border: 1px solid var(--border-color);
   background: var(--card-bg);
   box-shadow: var(--shadow-whisper);
-}
-
-.feature-card:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--gradient-start) 40%, var(--border-color));
 }
 
 .feature-card h3 {

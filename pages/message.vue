@@ -1,45 +1,62 @@
 <template>
-  <div class="message-wall" :class="colorMode.value">
-    <div class="barrage-container">
+  <div class="message-wall">
+    <div class="barrage-stage" aria-hidden="true">
       <div
         v-for="msg in messages"
         :key="msg.id"
+        :ref="(el) => bindEl(msg.id, el)"
         class="barrage-item"
-        :class="colorMode.value"
+        :class="[`is-${msg.layer}`, { 'is-mine': msg.mine }]"
         :style="{
-          top: (msg.track * TRACK_HEIGHT + TRACK_MARGIN) + 'px',
-          left: msg.left + 'px',
+          top: `${msg.top}px`,
           zIndex: msg.z,
-          width: msg.width + 'px',
+          color: msg.color,
+          '--glow': msg.glow,
         }"
-        ref="barrageRefs"
       >
-        <img class="avatar" :src="msg.avatar" />
-        <span class="nickname">{{ msg.nickname }}</span>
-        <span class="content">{{ msg.content }}</span>
+        <span class="line">
+          <b class="nickname">{{ msg.nickname }}</b>
+          <span class="content">{{ msg.content }}</span>
+        </span>
       </div>
     </div>
-    <div class="input-bar" :class="colorMode.value">
-      <input v-model="input" @keyup.enter="sendMessage" placeholder="说点什么..." />
-      <button @click="sendMessage">发送</button>
+
+    <div class="input-bar">
+      <input
+        v-model="input"
+        maxlength="48"
+        placeholder="说点什么..."
+        @keyup.enter="sendMessage"
+      >
+      <button type="button" @click="sendMessage">发送</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const colorMode = useColorMode()
+definePageMeta({
+  layout: 'default',
+  title: '某某软件 - 留言墙',
+})
 
-const AVATARS = [
-  'https://api.multiavatar.com/1.png',
-  'https://api.multiavatar.com/2.png',
-  'https://api.multiavatar.com/3.png',
-  'https://api.multiavatar.com/4.png',
-  'https://api.multiavatar.com/5.png',
-  'https://api.multiavatar.com/6.png',
-  'https://api.multiavatar.com/7.png',
-  'https://api.multiavatar.com/8.png',
-]
-const NICKNAMES = ['小明','小红','小蓝','小绿','小黄','小白','小黑','访客','路人甲','匿名']
+type Layer = 'far' | 'mid' | 'near'
+
+interface Barrage {
+  id: number
+  nickname: string
+  content: string
+  top: number
+  x: number
+  speed: number
+  width: number
+  z: number
+  color: string
+  glow: string
+  layer: Layer
+  mine?: boolean
+}
+
+const NICKNAMES = ['小明', '小红', '阿柯', '林深', '南风', '访客', '路人甲', '匿名', '星子', '老王', '七七', '北岛']
 const RANDOM_MESSAGES = [
   '这个某某软件真好用！',
   '期待正式版发布！',
@@ -47,234 +64,274 @@ const RANDOM_MESSAGES = [
   '使用体验非常流畅',
   '功能越来越丰富了',
   '支持国产软件！',
-  '希望多加一些实用功能',
   '已经推荐给朋友了',
   '终于有好用的某某工具了',
   '界面很清爽，喜欢',
   '这个弹幕效果太酷了',
   '希望能一直更新下去',
   '好期待后续更新',
-  '比某信好用多了👍',
-  '希望增加更多表情包',
-  '已经成为我的主力某某软件'
+  '已经成为我的主力某某软件',
+  '深色模式也很好看',
+  '多端同步很稳',
+  'Web 体验什么时候开',
+  '安装包真的好小',
+  'AI 助手挺聪明',
 ]
 
-const TRACK_HEIGHT = 52
-const TRACK_MARGIN = 60
-const BARRAGE_WIDTH = 280
-const BARRAGE_HEIGHT = 44
-const BARRAGE_SPEED: [number, number] = [1.2, 1.6] // px/frame
+const HUES = [12, 28, 42, 152, 178, 198, 268, 328, 348, 210]
+const TRACK_HEIGHT = 36
+const TRACK_MARGIN = 80
 
-const messages = ref<any[]>([])
+const messages = ref<Barrage[]>([])
 const input = ref('')
-let id = 1
-const barrageRefs = ref([])
+const els = new Map<number, HTMLElement>()
+const colorMode = useColorMode()
 
-const nextTick = (fn: () => void) => setTimeout(fn, 0)
+let nextId = 1
+let raf = 0
+let measureCtx: CanvasRenderingContext2D | null = null
+let reduce = false
 
-function randomInt(min:number, max:number) {
+function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-function getTrackCount() {
-  return Math.floor((window.innerHeight - 2 * TRACK_MARGIN) / TRACK_HEIGHT)
+function pick<T>(list: T[]) {
+  return list[randomInt(0, list.length - 1)]
 }
 
-function getCenterOutTracks(trackCount: number): number[] {
-  const center = Math.floor((trackCount - 1) / 2)
-  const order: number[] = []
-  for (let i = 0; i < trackCount; i++) {
-    const offset = Math.floor((i + 1) / 2)
-    if (i % 2 === 0) {
-      order.push(center - offset)
-    } else {
-      order.push(center + offset)
-    }
+function isDark() {
+  return colorMode.value === 'dark'
+}
+
+function palette(hue: number) {
+  const color = isDark()
+    ? `hsl(${hue} 78% 74%)`
+    : `hsl(${hue} 64% 40%)`
+  return {
+    color,
+    glow: isDark()
+      ? `hsl(${hue} 80% 62% / 0.45)`
+      : `hsl(${hue} 70% 46% / 0.28)`,
   }
-  return order.filter(t => t >= 0 && t < trackCount)
 }
 
-function getAvailableTrack() {
-  const trackCount = getTrackCount()
-  const order = getCenterOutTracks(trackCount)
-  const usedTracks = messages.value.map((m: any) => m.track)
-  let track = order.find(t => !usedTracks.includes(t))
-  if (track === undefined) {
-    track = order[messages.value.length % trackCount]
+function cap() {
+  const wide = window.innerWidth >= 768
+  return reduce ? (wide ? 10 : 6) : (wide ? 40 : 20)
+}
+
+function trackCount() {
+  return Math.max(4, Math.floor((window.innerHeight - TRACK_MARGIN * 2) / TRACK_HEIGHT))
+}
+
+function measure(text: string, layer: Layer) {
+  if (!measureCtx) {
+    measureCtx = document.createElement('canvas').getContext('2d')
   }
-  return track
+  const size = layer === 'near' ? 18 : layer === 'mid' ? 15 : 13
+  if (!measureCtx) return text.length * size * 0.9
+  measureCtx.font = `600 ${size}px ui-sans-serif, system-ui, sans-serif`
+  return Math.ceil(measureCtx.measureText(text).width) + 24
 }
 
-function addBarrage(msg: any) {
-  // 先渲染到页面，获取宽度
-  messages.value.push(msg)
-  nextTick(() => {
-    const idx = messages.value.findIndex((m: any) => m.id === msg.id)
-    const el = document.querySelectorAll('.barrage-item')[idx] as HTMLElement
-    msg.width = el ? el.offsetWidth : BARRAGE_WIDTH
-  })
+function bindEl(id: number, el: Element | ComponentPublicInstance | null) {
+  if (el instanceof HTMLElement) {
+    els.set(id, el)
+    el.style.transform = `translate3d(${messages.value.find((m) => m.id === id)?.x ?? 0}px, 0, 0)`
+  } else {
+    els.delete(id)
+  }
 }
 
-// 辅助函数用于计算速度，避免TS错误
-function calculateSpeed(): number {
-  return Math.random() * (BARRAGE_SPEED[1] - BARRAGE_SPEED[0]) + BARRAGE_SPEED[0]
+function createBarrage(partial: Partial<Barrage> = {}): Barrage {
+  const roll = Math.random()
+  const layer: Layer = partial.layer ?? (roll < 0.28 ? 'far' : roll < 0.72 ? 'mid' : 'near')
+  const hue = HUES[randomInt(0, HUES.length - 1)]
+  const ink = palette(hue)
+  const nickname = partial.nickname ?? pick(NICKNAMES)
+  const content = partial.content ?? pick(RANDOM_MESSAGES)
+  const speedScale = reduce ? 0.18 : 1
+  const speed = ((layer === 'far' ? randomInt(40, 70) : layer === 'mid' ? randomInt(80, 130) : randomInt(140, 210)) / 60) * speedScale
+  return {
+    id: partial.id ?? nextId++,
+    nickname,
+    content,
+    top: TRACK_MARGIN + randomInt(0, trackCount() - 1) * TRACK_HEIGHT,
+    x: partial.x ?? window.innerWidth + randomInt(8, 280),
+    speed,
+    width: measure(`${nickname}  ${content}`, layer),
+    z: layer === 'near' ? randomInt(8, 16) : layer === 'mid' ? randomInt(4, 8) : randomInt(1, 4),
+    color: partial.color ?? ink.color,
+    glow: partial.glow ?? ink.glow,
+    layer,
+    mine: partial.mine,
+  }
+}
+
+function seed() {
+  const count = cap()
+  const next: Barrage[] = []
+  for (let i = 0; i < count; i++) {
+    next.push(createBarrage({
+      x: randomInt(-120, Math.max(80, window.innerWidth - 40)),
+    }))
+  }
+  messages.value = next
+}
+
+function recycle(msg: Barrage) {
+  Object.assign(msg, createBarrage({
+    id: msg.id,
+    x: window.innerWidth + randomInt(16, 240),
+    mine: false,
+  }))
+  els.get(msg.id)?.style.setProperty('transform', `translate3d(${msg.x}px, 0, 0)`)
 }
 
 function sendMessage() {
-  if (!input.value.trim()) return
-  const track = getAvailableTrack()
-  const left = window.innerWidth
-  const speed = calculateSpeed()
-  const msg = {
-    id: id++,
-    avatar: AVATARS[randomInt(0, AVATARS.length-1)],
-    nickname: NICKNAMES[randomInt(0, NICKNAMES.length-1)],
-    content: input.value,
-    track,
-    left,
-    speed,
-    z: randomInt(1, 10),
-    width: BARRAGE_WIDTH
+  const text = input.value.trim()
+  if (!text) return
+  const hue = 18
+  const { color, glow } = palette(hue)
+  const msg = createBarrage({
+    nickname: '我',
+    content: text,
+    layer: 'near',
+    mine: true,
+    color,
+    glow,
+    x: window.innerWidth + 12,
+    z: 20,
+  })
+  if (messages.value.length >= cap()) {
+    const drop = messages.value.shift()
+    if (drop) els.delete(drop.id)
   }
-  addBarrage(msg)
+  messages.value.push(msg)
   input.value = ''
 }
 
-// 初始弹幕
-onMounted(() => {
-  for (let i = 0; i < 3; i++) {
-    const track = getAvailableTrack()
-    const left = window.innerWidth + i * 120
-    const speed = calculateSpeed()
-    const msg = {
-      id: id++,
-      avatar: AVATARS[randomInt(0, AVATARS.length-1)],
-      nickname: NICKNAMES[randomInt(0, NICKNAMES.length-1)],
-      content: ['你好，欢迎留言！','这个网站真好看！','加油！'][i],
-      track,
-      left,
-      speed,
-      z: randomInt(1, 10),
-      width: BARRAGE_WIDTH
+function tick(last: number) {
+  raf = requestAnimationFrame((now) => {
+    const dt = Math.min(32, now - last) / 16.67
+    for (const msg of messages.value) {
+      msg.x -= msg.speed * dt
+      const el = els.get(msg.id)
+      if (el) el.style.transform = `translate3d(${msg.x}px, 0, 0)`
+      if (msg.x < -msg.width - 32) recycle(msg)
     }
-    addBarrage(msg)
-  }
-  animateBarrages()
+    tick(now)
+  })
+}
+
+onMounted(() => {
+  reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  seed()
+  nextTick(() => tick(performance.now()))
+  document.addEventListener('visibilitychange', onVisibility)
 })
 
-function animateBarrages() {
-  for (const msg of messages.value) {
-    msg.left -= msg.speed
-    if (msg.left < -msg.width) {
-      // 当弹幕完全消失在左侧屏幕外时
-      // 不直接将弹幕重置到右侧，而是创建一个新弹幕
-      // 删除当前弹幕并创建一个新弹幕，保持消息总数不变
-      const track = getAvailableTrack()
-      const speed = calculateSpeed()
-      
-      // 保存原始ID以便找到并替换对应元素
-      const originalId = msg.id
-      
-      // 创建新弹幕对象
-      const newMsg = {
-        id: id++,
-        avatar: AVATARS[randomInt(0, AVATARS.length-1)],
-        nickname: NICKNAMES[randomInt(0, NICKNAMES.length-1)],
-        content: RANDOM_MESSAGES[randomInt(0, RANDOM_MESSAGES.length-1)],
-        track,
-        left: window.innerWidth, // 放在屏幕右侧
-        speed,
-        z: randomInt(1, 10),
-        width: BARRAGE_WIDTH
-      }
-      
-      // 找到并替换旧弹幕
-      const index = messages.value.findIndex((m: any) => m.id === originalId)
-      if (index !== -1) {
-        messages.value.splice(index, 1, newMsg)
-      }
-      
-      // 获取元素宽度
-      nextTick(() => {
-        const idx = messages.value.findIndex((m: any) => m.id === newMsg.id)
-        const el = document.querySelectorAll('.barrage-item')[idx] as HTMLElement
-        if (el) {
-          newMsg.width = el.offsetWidth
-        }
-      })
-    }
+function onVisibility() {
+  if (document.hidden) {
+    cancelAnimationFrame(raf)
+    raf = 0
+    return
   }
-  requestAnimationFrame(animateBarrages)
+  if (!raf) tick(performance.now())
 }
+
+onUnmounted(() => {
+  cancelAnimationFrame(raf)
+  document.removeEventListener('visibilitychange', onVisibility)
+  els.clear()
+})
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .message-wall {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  position: relative;
+  min-height: calc(100dvh - var(--header-height));
   overflow: hidden;
-  background: var(--bg-color);
+  background:
+    radial-gradient(1200px 520px at 12% 18%, color-mix(in srgb, var(--primary-color) 14%, transparent), transparent 60%),
+    radial-gradient(900px 480px at 88% 70%, color-mix(in srgb, var(--gradient-end) 12%, transparent), transparent 62%),
+    var(--bg-color);
 }
-.barrage-container {
+
+.barrage-stage {
   position: absolute;
-  inset: 0;
+  inset: 0 0 88px;
+  overflow: hidden;
   pointer-events: none;
 }
+
 .barrage-item {
   position: absolute;
   left: 0;
-  width: 280px;
-  height: 44px;
-  padding: 0 16px;
-  border-radius: 14px;
-  color: var(--text-color);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  box-shadow: var(--shadow-whisper);
-  pointer-events: auto;
-  user-select: none;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  will-change: transform, left;
-}
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: var(--card-bg);
-}
-.nickname {
-  font-weight: bold;
-  margin-right: 4px;
-  font-size: 15px;
-}
-.content {
-  word-break: break-all;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+  contain: layout style;
 }
+
+.line {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  text-shadow: 0 0 16px var(--glow);
+}
+
+.nickname {
+  font-weight: 700;
+}
+
+.content {
+  font-weight: 500;
+  opacity: 0.92;
+}
+
+.is-far {
+  font-size: 13px;
+  opacity: 0.42;
+}
+
+.is-far .line {
+  text-shadow: none;
+}
+
+.is-mid {
+  font-size: 15px;
+  opacity: 0.82;
+}
+
+.is-near {
+  font-size: 18px;
+  opacity: 1;
+  letter-spacing: 0.01em;
+}
+
+.is-mine .line {
+  animation: mine-pop var(--duration-ui) var(--ease-out);
+}
+
 .input-bar {
-  position: relative;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  width: 100%;
-  padding: 24px var(--page-gutter) 32px;
-  background: linear-gradient(0deg, var(--bg-color) 0%, transparent 100%);
+  padding: 20px var(--page-gutter) 28px;
+  background: linear-gradient(0deg, var(--bg-color) 55%, transparent);
 }
+
 .input-bar input {
-  width: 220px;
+  width: min(320px, 62vw);
   height: 40px;
   padding: 0 16px;
   border: 1px solid var(--border-color);
@@ -282,8 +339,10 @@ function animateBarrages() {
   outline: none;
   background: var(--card-bg);
   color: var(--text-color);
-  font-size: 16px;
+  font: inherit;
+  font-size: 15px;
 }
+
 .input-bar button {
   height: 40px;
   padding: 0 20px;
@@ -291,24 +350,37 @@ function animateBarrages() {
   border-radius: var(--radius-md);
   background: var(--primary-color);
   color: var(--on-primary);
-  font-size: 16px;
+  font: inherit;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
 }
+
+@keyframes mine-pop {
+  from {
+    opacity: 0.35;
+    transform: scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-mine .line {
+    animation: none;
+  }
+}
+
 @media (max-width: 600px) {
-  .barrage-item {
-    font-size: 13px;
-    width: 90vw;
-    height: 36px;
-    padding: 0 8px;
+  .is-near {
+    font-size: 16px;
   }
+
   .input-bar input {
-    width: 60vw;
-    font-size: 14px;
-  }
-  .input-bar button {
-    font-size: 14px;
-    padding: 0 16px;
+    width: 58vw;
   }
 }
 </style>
