@@ -67,7 +67,7 @@ const handleContact = () => {
             </ul>
           </div>
           <div class="card-footer">
-            <el-button type="primary" @click="handleDownload('free')">
+            <el-button type="primary" class="warm-cta" @click="handleDownload('free')">
               立即下载
             </el-button>
           </div>
@@ -111,7 +111,7 @@ const handleContact = () => {
             </ul>
           </div>
           <div class="card-footer">
-            <el-button type="primary" @click="handlePurchase('pro')">
+            <el-button type="primary" class="warm-cta" @click="handlePurchase('pro')">
               立即购买
             </el-button>
           </div>
@@ -154,7 +154,7 @@ const handleContact = () => {
             </ul>
           </div>
           <div class="card-footer">
-            <el-button type="primary" @click="handleContact">
+            <el-button type="primary" class="warm-cta" @click="handleContact">
               联系我们
             </el-button>
           </div>
@@ -308,6 +308,18 @@ const handleContact = () => {
       }
     }
   }
+
+  :deep(.warm-cta.el-button--primary) {
+    background: #c96442 !important;
+    border-color: #c96442 !important;
+    color: #faf9f5 !important;
+    box-shadow: 0 0 0 1px #c96442 !important;
+  }
+
+  :deep(.warm-cta.el-button--primary:hover) {
+    box-shadow: 0 0 0 1px #d1cfc5 !important;
+    transform: translateY(-1px);
+  }
   
   .faq-section {
     max-width: 800px;
@@ -340,7 +352,7 @@ const handleContact = () => {
           
           &:hover {
             transform: scale(1.03);
-            box-shadow: 0 4px 24px rgba(128,90,213,0.10);
+            box-shadow: 0 4px 24px rgba(201,100,66,0.12);
             z-index: 1;
           }
           

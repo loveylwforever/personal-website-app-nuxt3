@@ -3,7 +3,7 @@
     <div class="error-content">
       <h1 class="error-title">{{ error?.statusCode === 404 ? '页面未找到' : '出错了' }}</h1>
       <p class="error-message">{{ error?.message || '抱歉，发生了一些错误' }}</p>
-      <el-button type="primary" @click="handleError">返回首页</el-button>
+      <el-button type="primary" class="warm-cta" @click="handleError">返回首页</el-button>
     </div>
   </div>
 </template>
@@ -27,7 +27,8 @@ const handleError = () => {
   justify-content: center;
   text-align: center;
   padding: 2rem;
-  background: var(--background-color);
+  background: var(--bg-color);
+  color: var(--text-color);
 }
 
 .error-content {
@@ -49,5 +50,12 @@ const handleError = () => {
 .error-message {
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 2rem;
+}
+
+:deep(.warm-cta.el-button--primary) {
+  background: #c96442 !important;
+  border-color: #c96442 !important;
+  color: #faf9f5 !important;
+  box-shadow: 0 0 0 1px #c96442 !important;
 }
 </style> 

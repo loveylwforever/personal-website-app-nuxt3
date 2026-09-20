@@ -1,20 +1,15 @@
 <template>
   <div class="default-layout">
     <AppHeader />
-    <NuxtPage />
+    <slot />
     <AppFooter />
   </div>
 </template>
 
-<script setup>
-import AppHeader from '~/components/AppHeader.vue'
-import AppFooter from '~/components/AppFooter.vue'
-</script>
-
 <style scoped>
 .default-layout {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg-color);
-  position: relative;
+  color: var(--text-color);
 }
 </style>

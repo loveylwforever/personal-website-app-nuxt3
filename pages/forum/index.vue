@@ -59,11 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useForumStore } from '~/stores/forum'
-
 const store = useForumStore()
-// 按最后活跃时间倒序排列
 const sortedPosts = computed(() =>
   [...store.posts].sort((a, b) => new Date(b.lastActiveAt).getTime() - new Date(a.lastActiveAt).getTime())
 )
@@ -73,7 +69,7 @@ const sortedPosts = computed(() =>
 :root {
   --forum-bg-light: rgba(245, 247, 250, 0.85);
   --forum-bg-dark: rgba(30, 32, 40, 0.85);
-  --sidebar-bg: var(--gradient-start, #3b82f6);
+  --sidebar-bg: var(--gradient-start, #c96442);
   --sidebar-bg-dark: #222b3a;
 }
 [data-theme="dark"] {
@@ -87,19 +83,19 @@ html, body {
 .forum-main-layout {
   display: flex;
   min-height: 100vh;
-  margin: 32px;
-  padding: 48px 32px;
+  margin: 24px;
+  padding: 24px;
   gap: 32px;
-  background: var(--forum-bg, var(--forum-bg-light));
-  border-radius: 18px;
-  box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+  background: color-mix(in srgb, var(--card-bg) 92%, var(--bg-color));
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
   backdrop-filter: blur(12px);
-  /* 让内容更通透 */
 }
 .forum-sidebar {
   width: 220px;
-  background: linear-gradient(135deg, var(--gradient-start, #3b82f6), var(--gradient-end, #6366f1));
-  color: #fff;
+  background: color-mix(in srgb, var(--bg-darker) 72%, var(--card-bg));
+  color: var(--text-color);
   border-radius: 14px;
   padding: 24px 16px;
   box-shadow: 0 2px 8px rgba(80,80,120,0.06);
@@ -110,7 +106,7 @@ html, body {
   border: 1.5px solid rgba(120,120,180,0.08);
 }
 .sidebar-title, .sidebar-list li, .category-list li {
-  color: #fff;
+  color: var(--text-color);
 }
 .sidebar-title {
   font-weight: bold;
@@ -132,10 +128,10 @@ html, body {
   position: relative;
 }
 .sidebar-list li.active {
-  font-weight: bold;
-  color: #fff;
-  background: linear-gradient(90deg, var(--gradient-start, #3b82f6) 0%, var(--gradient-end, #6366f1) 100%);
-  box-shadow: 0 2px 8px rgba(80,80,120,0.10);
+  font-weight: 600;
+  color: var(--text-color);
+  background: rgba(var(--gradient-start-rgb), 0.14);
+  box-shadow: none;
   position: relative;
 }
 .sidebar-list li.active::before {
@@ -144,7 +140,7 @@ html, body {
   left: 0; top: 6px; bottom: 6px;
   width: 4px;
   border-radius: 3px;
-  background: var(--gradient-end, #6366f1);
+  background: var(--gradient-end, #d97757);
 }
 .category-list li {
   display: flex;
@@ -165,10 +161,10 @@ html, body {
   height: 10px;
   border-radius: 50%;
 }
-.cat-discussion { background: #3b82f6; }
+.cat-discussion { background: #c98b42; }
 .cat-howto { background: #f59e42; }
 .cat-feature { background: #22c55e; }
-.cat-bug { background: #6366f1; }
+.cat-bug { background: #c96442; }
 .cat-feedback { background: #f43f5e; }
 .all-categories { color: #888; font-size: 13px; margin-top: 8px; }
 
@@ -194,7 +190,7 @@ html, body {
   letter-spacing: 1px;
 }
 .post-btn {
-  background: linear-gradient(90deg, var(--gradient-start, #3b82f6), var(--gradient-end, #6366f1));
+  background: #c96442;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -203,28 +199,28 @@ html, body {
   font-weight: bold;
   box-shadow: 0 2px 8px rgba(80,80,120,0.10);
   cursor: pointer;
-  transition: background 0.18s, box-shadow 0.18s;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .post-btn:hover {
-  background: linear-gradient(90deg, var(--gradient-end, #6366f1), var(--gradient-start, #3b82f6));
-  box-shadow: 0 4px 16px rgba(80,80,120,0.16);
+  box-shadow: 0 0 0 1px #d1cfc5;
+  transform: translateY(-1px);
 }
 .pinned-list {
   display: flex;
   gap: 16px;
 }
 .pinned-item {
-  background: rgba(255,255,255,0.85);
+  background: color-mix(in srgb, var(--card-bg) 92%, var(--bg-color));
   border-radius: 8px;
   padding: 8px 16px;
   font-size: 14px;
-  color: #555;
+  color: var(--text-secondary);
   box-shadow: 0 1.5px 6px rgba(80,80,120,0.07);
   border: 1px solid rgba(120,120,180,0.07);
   backdrop-filter: blur(4px);
 }
 .forum-table-block {
-  background: rgba(255,255,255,0.92);
+  background: color-mix(in srgb, var(--card-bg) 95%, var(--bg-color));
   border-radius: 14px;
   box-shadow: 0 2px 12px rgba(80,80,120,0.10);
   padding: 0 0 8px 0;
@@ -234,7 +230,7 @@ html, body {
 .forum-table-header {
   display: flex;
   font-weight: bold;
-  color: #888;
+  color: var(--text-tertiary);
   font-size: 15px;
   border-bottom: 1px solid #eee;
   padding: 16px 24px 8px 24px;
@@ -245,19 +241,20 @@ html, body {
   display: flex;
   align-items: center;
   font-size: 15px;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f0eee6;
   padding: 12px 24px;
   gap: 0;
-  transition: background 0.18s, box-shadow 0.18s;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   border-radius: 8px;
 }
 .forum-table-row:hover {
-  background: rgba(var(--gradient-end-rgb),0.08);
-  box-shadow: 0 2px 8px rgba(var(--gradient-end-rgb),0.10);
+  background: rgba(var(--gradient-start-rgb),0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .col-topic { flex: 2; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .col-replies, .col-views, .col-activity { flex: 1; text-align: center; }
-.forum-topic-link { color: var(--gradient-start); text-decoration: underline; cursor: pointer; font-weight: 500; }
+.forum-topic-link { color: var(--text-color); text-decoration: none; cursor: pointer; font-weight: 500; }
+.forum-topic-link:hover { color: var(--gradient-start); }
 .empty { text-align: center; color: #aaa; margin: 32px 0; }
 @media (max-width: 900px) {
   .forum-main-layout { flex-direction: column; gap: 0; padding: 12px 8px; }

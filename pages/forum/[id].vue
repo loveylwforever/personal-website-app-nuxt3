@@ -68,7 +68,7 @@ function submitComment() {
 .post-header h2 { margin-bottom: 8px; }
 .meta { color: #888; font-size: 13px; display: flex; gap: 16px; margin-bottom: 12px; }
 .post-content { font-size: 16px; margin-bottom: 24px; }
-.comments-block { background: #fafbfc; border-radius: 8px; padding: 16px; }
+.comments-block { background: #faf9f5; border-radius: 8px; padding: 16px; }
 .comment { font-size: 14px; color: #555; margin-bottom: 8px; }
 .comment-author { font-weight: bold; color: var(--gradient-start); }
 .comment-date { font-size: 12px; color: #aaa; margin-left: 8px; }

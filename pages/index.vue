@@ -10,7 +10,7 @@ import { useMouseInElement } from '@vueuse/core'
 import { ArrowDown, Monitor, Picture } from '@element-plus/icons-vue'
 import Browser from '~/assets/icons/brower.vue'
 import Download from '~/assets/icons/download.vue'
-import { ElMessage } from 'element-plus/es/components/message'
+import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { detectOS, getPreferredDownloadPlatform, getPlatformDisplay, getPlatformButtonClass, type Platform } from '~/utils/platformDetect'
 import Three3DParticles from '~/components/Three3DParticles.vue'
@@ -25,7 +25,7 @@ const colorMode = useColorMode()
 const currentTheme = computed(() => colorMode.value)
 
 // 添加客户端专用的状态
-const isClientSide = ref(process.client)
+const isClientSide = ref(import.meta.client)
 const isInitialized = ref(false)
 
 // 用户平台状态 - 设置默认值
@@ -407,8 +407,8 @@ onUnmounted(() => {
             <h2 class="hero-tagline">一个轻量的某某软件</h2>
             <p class="hero-description">
               一款基于 <span class="highlight">Tauri2</span> 和 <span class="highlight">Nuxt3</span> 
-              构建的轻量级 (≈ 8 MB) 多平台即时通讯应用，配备 AI 群聊机器人（如 <span class="highlight">DeepSeek</span>、讯飞星火）、
-              <span class="highlight">WebRTC</span> 音视频通话，屏幕共享和 AI 购物客服...
+              构建的轻量级 (≈ 8 MB) 多平台应用，配备 AI （如 <span class="highlight">DeepSeek</span>、讯飞星火）、
+              <span class="highlight">WebRTC</span> 音视频通话，屏幕共享等...
             </p>
             <div class="download-buttons">
               <el-dropdown trigger="click" @command="handleDownload">
@@ -543,7 +543,9 @@ onUnmounted(() => {
     </el-dialog>
     
     <!-- 3D粒子背景 - 直接传递当前主题 -->
-    <Three3DParticles :theme="colorMode.value" class="particles-background" />
+    <ClientOnly>
+      <Three3DParticles :theme="colorMode.value" class="particles-background" />
+    </ClientOnly>
   </div>
 </template>
 
@@ -758,7 +760,7 @@ onUnmounted(() => {
       color: var(--text-tertiary);
       text-decoration: underline;
       cursor: pointer;
-      transition: color 0.2s ease;
+      transition: color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       
       &:hover {
         color: var(--text-secondary);
@@ -899,6 +901,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   position: relative;
+  background: transparent;
 
   .hero-section {
     display: flex;
@@ -1138,7 +1141,7 @@ onUnmounted(() => {
       color: var(--text-secondary);
       font-size: 14px;
       cursor: pointer;
-      transition: color 0.2s ease;
+      transition: color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       
       &:hover {
         color: var(--text-color);
@@ -1193,8 +1196,8 @@ onUnmounted(() => {
   }
 
   .features-section {
-    background-color: var(--bg-darker);
-    background-image: radial-gradient(ellipse at top left, rgba(var(--gradient-start-rgb), 0.15) 0%, transparent 65%);
+    background-color: transparent;
+    background-image: none;
     padding: 80px 0;
 
     .container {
@@ -1467,9 +1470,10 @@ html.dark {
       border-color: var(--gradient-start);
       
       .el-button {
-        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-        border-color: transparent;
-        color: #FFFFFF;
+        background: #c96442;
+        border-color: #c96442;
+        color: #faf9f5;
+        box-shadow: 0 0 0 1px #c96442;
       }
     }
     .option-info {
@@ -1516,6 +1520,10 @@ html.dark {
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #c96442;
+      border-color: #c96442;
+      color: #faf9f5;
+      box-shadow: 0 0 0 1px #c96442;
       
       .el-icon {
         font-size: 14px;
@@ -1531,9 +1539,10 @@ html.dark {
       }
       
       &.recommended-platform {
-        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-        color: white;
-        border-color: transparent;
+        background: #c96442;
+        color: #faf9f5;
+        border-color: #c96442;
+        box-shadow: 0 0 0 1px #c96442;
         position: relative;
       }
     }
@@ -1550,6 +1559,18 @@ html.dark {
       min-height: 120px;
     }
   }
+}
+
+/* Teleported dialog button fallback to avoid Element default blue */
+:deep(.download-dialog .el-button--primary) {
+  background: #c96442 !important;
+  border-color: #c96442 !important;
+  color: #faf9f5 !important;
+  box-shadow: 0 0 0 1px #c96442 !important;
+}
+
+:deep(.download-dialog .el-button--primary:hover) {
+  box-shadow: 0 0 0 1px #d1cfc5 !important;
 }
 
 :deep(.el-dialog) {
@@ -1690,5 +1711,53 @@ html.dark :deep(.el-dropdown-menu) {
     --el-dropdown-menuItem-active-color: var(--gradient-start);
     --el-dropdown-menuItem-active-fill: rgba(var(--gradient-start-rgb), 0.1);
   }
+}
+
+/* Claude-style page overrides */
+.home-page .hero-section .hero-title-container .hero-title,
+.home-centered .hero-section .title {
+  color: var(--text-color);
+  background: none;
+  -webkit-text-fill-color: var(--text-color);
+  letter-spacing: 0.4px;
+}
+
+.home-page .hero-section .download-buttons .download-button,
+.home-page .hero-section .download-buttons .web-button,
+.home-centered .hero-section .action-buttons .download-button,
+.home-centered .hero-section .action-buttons .web-button {
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
+}
+
+.home-page .hero-section .download-buttons .download-button,
+.home-centered .hero-section .action-buttons .download-button {
+  background: var(--text-color);
+  border: 1px solid transparent;
+}
+
+.home-page .hero-section .download-buttons .web-button,
+.home-centered .hero-section .action-buttons .web-button {
+  border: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--card-bg) 92%, var(--bg-color));
+  color: var(--text-color);
+}
+
+.home-page .features-section .feature-card {
+  border-radius: 16px;
+  border-color: var(--border-color);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.home-page .features-section .feature-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--gradient-start) 40%, var(--border-color));
+}
+
+.home-page .hero-section .app-screenshot-container .screenshot-wrapper,
+.home-centered .preview-section .preview-image {
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14);
 }
 </style>

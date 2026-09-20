@@ -1,11 +1,11 @@
 <template>
-  <div class="message-wall" :class="colorMode">
+  <div class="message-wall" :class="colorMode.value">
     <div class="barrage-container">
       <div
         v-for="msg in messages"
         :key="msg.id"
         class="barrage-item"
-        :class="colorMode"
+        :class="colorMode.value"
         :style="{
           top: (msg.track * TRACK_HEIGHT + TRACK_MARGIN) + 'px',
           left: msg.left + 'px',
@@ -19,7 +19,7 @@
         <span class="content">{{ msg.content }}</span>
       </div>
     </div>
-    <div class="input-bar" :class="colorMode">
+    <div class="input-bar" :class="colorMode.value">
       <input v-model="input" @keyup.enter="sendMessage" placeholder="说点什么..." />
       <button @click="sendMessage">发送</button>
     </div>
@@ -27,8 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useColorMode } from '@vueuse/core'
+const colorMode = useColorMode()
 
 const AVATARS = [
   'https://api.multiavatar.com/1.png',
@@ -64,12 +63,11 @@ const TRACK_HEIGHT = 52
 const TRACK_MARGIN = 60
 const BARRAGE_WIDTH = 280
 const BARRAGE_HEIGHT = 44
-const BARRAGE_SPEED = [1.2, 1.6] // px/frame
+const BARRAGE_SPEED: [number, number] = [1.2, 1.6] // px/frame
 
 const messages = ref<any[]>([])
 const input = ref('')
 let id = 1
-const colorMode = useColorMode()
 const barrageRefs = ref([])
 
 const nextTick = (fn: () => void) => setTimeout(fn, 0)
@@ -117,11 +115,16 @@ function addBarrage(msg: any) {
   })
 }
 
+// 辅助函数用于计算速度，避免TS错误
+function calculateSpeed(): number {
+  return Math.random() * (BARRAGE_SPEED[1] - BARRAGE_SPEED[0]) + BARRAGE_SPEED[0]
+}
+
 function sendMessage() {
   if (!input.value.trim()) return
   const track = getAvailableTrack()
   const left = window.innerWidth
-  const speed = Math.random() * (BARRAGE_SPEED[1] - BARRAGE_SPEED[0]) + BARRAGE_SPEED[0]
+  const speed = calculateSpeed()
   const msg = {
     id: id++,
     avatar: AVATARS[randomInt(0, AVATARS.length-1)],
@@ -142,7 +145,7 @@ onMounted(() => {
   for (let i = 0; i < 3; i++) {
     const track = getAvailableTrack()
     const left = window.innerWidth + i * 120
-    const speed = Math.random() * (BARRAGE_SPEED[1] - BARRAGE_SPEED[0]) + BARRAGE_SPEED[0]
+    const speed = calculateSpeed()
     const msg = {
       id: id++,
       avatar: AVATARS[randomInt(0, AVATARS.length-1)],
@@ -167,7 +170,7 @@ function animateBarrages() {
       // 不直接将弹幕重置到右侧，而是创建一个新弹幕
       // 删除当前弹幕并创建一个新弹幕，保持消息总数不变
       const track = getAvailableTrack()
-      const speed = Math.random() * (BARRAGE_SPEED[1] - BARRAGE_SPEED[0]) + BARRAGE_SPEED[0]
+      const speed = calculateSpeed()
       
       // 保存原始ID以便找到并替换对应元素
       const originalId = msg.id
@@ -217,10 +220,10 @@ function animateBarrages() {
   flex-direction: column;
   justify-content: flex-end;
   &.dark {
-    background: linear-gradient(120deg, #232526 0%, #414345 100%);
+    background: #121418;
   }
   &.light {
-    background: linear-gradient(120deg, #f8fafc 0%, #e2e8f0 100%);
+    background: #f6f7f4;
   }
 }
 .barrage-container {
@@ -234,7 +237,7 @@ function animateBarrages() {
   width: 280px;
   height: 44px;
   padding: 0 16px;
-  border-radius: 22px;
+  border-radius: 14px;
   color: #fff;
   display: flex;
   align-items: center;
@@ -243,12 +246,13 @@ function animateBarrages() {
   box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
   pointer-events: auto;
   user-select: none;
-  background: rgba(0,0,0,0.7);
+  background: rgba(20, 22, 28, 0.82);
   will-change: transform, left;
   &.light {
-    background: rgba(255,255,255,0.85);
-    color: #222;
+    background: rgba(255,255,255,0.9);
+    color: #141413;
     box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+    border: 1px solid rgba(31, 35, 40, 0.12);
   }
 }
 .avatar {
@@ -279,16 +283,16 @@ function animateBarrages() {
   position: relative;
   z-index: 2;
   gap: 8px;
-  background: linear-gradient(0deg, rgba(30,30,30,0.7) 0%, rgba(30,30,30,0.0) 100%);
+  background: linear-gradient(0deg, rgba(18,20,24,0.74) 0%, rgba(18,20,24,0.0) 100%);
   &.light {
-    background: linear-gradient(0deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.0) 100%);
+    background: linear-gradient(0deg, rgba(246,247,244,0.9) 0%, rgba(246,247,244,0.0) 100%);
   }
 }
 .input-bar input {
   width: 220px;
   height: 40px;
-  border-radius: 20px;
-  border: none;
+  border-radius: 12px;
+  border: 1px solid rgba(31, 35, 40, 0.14);
   outline: none;
   padding: 0 20px;
   font-size: 16px;
@@ -299,19 +303,20 @@ function animateBarrages() {
 }
 .input-bar button {
   height: 40px;
-  border-radius: 20px;
+  border-radius: 12px;
   border: none;
-  background: linear-gradient(135deg, var(--gradient-start, #805AD5) 0%, var(--gradient-end, #FFD200) 100%);
+  background: #c96442;
   color: #fff;
   font-weight: bold;
   font-size: 16px;
   padding: 0 24px;
   cursor: pointer;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
-  transition: background 0.2s;
+  box-shadow: 0 0 0 1px #c96442;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 .input-bar button:hover {
-  background: linear-gradient(-135deg, var(--gradient-end, #FFD200) 0%, var(--gradient-start, #805AD5) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px #d1cfc5;
 }
 @media (max-width: 600px) {
   .barrage-item {
@@ -329,4 +334,4 @@ function animateBarrages() {
     padding: 0 16px;
   }
 }
-</style> 
+</style>

@@ -103,7 +103,7 @@ const handleLearnMore = () => {
         <h2>准备好了吗？</h2>
         <p>下载桌面客户端，享受更完整的功能体验</p>
         <div class="cta-buttons">
-          <el-button type="primary" @click="handleDownload">
+          <el-button type="primary" class="warm-cta" @click="handleDownload">
             <el-icon><Download /></el-icon>
             下载客户端
           </el-button>
@@ -314,6 +314,17 @@ const handleLearnMore = () => {
       }
     }
   }
+}
+
+:deep(.warm-cta.el-button--primary) {
+  background: #c96442 !important;
+  border-color: #c96442 !important;
+  color: #faf9f5 !important;
+  box-shadow: 0 0 0 1px #c96442 !important;
+}
+
+:deep(.warm-cta.el-button--primary:hover) {
+  box-shadow: 0 0 0 1px #d1cfc5 !important;
 }
 
 @keyframes spin {

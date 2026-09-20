@@ -1,20 +1,24 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore } from "pinia";
 
-export const useLayoutStore = defineStore('layout', () => {
-  const layout = ref<'default' | 'alternative'>('default')
+export type HomeLayout = "default" | "alternative";
 
-  function setLayout(newLayout: 'default' | 'alternative') {
-    layout.value = newLayout
-    localStorage.setItem('homeLayout', newLayout)
-  }
+export const useLayoutStore = defineStore("layout", () => {
+  const layout = ref<HomeLayout>("default");
 
-  function initLayout() {
-    const saved = localStorage.getItem('homeLayout')
-    if (saved === 'default' || saved === 'alternative') {
-      layout.value = saved
+  function setLayout(next: HomeLayout) {
+    layout.value = next;
+    if (import.meta.client) {
+      localStorage.setItem("homeLayout", next);
     }
   }
 
-  return { layout, setLayout, initLayout }
-}) 
+  function initLayout() {
+    if (!import.meta.client) return;
+    const saved = localStorage.getItem("homeLayout");
+    if (saved === "default" || saved === "alternative") {
+      layout.value = saved;
+    }
+  }
+
+  return { layout, setLayout, initLayout };
+});

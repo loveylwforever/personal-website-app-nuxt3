@@ -28,8 +28,8 @@ const config = useRuntimeConfig()
 const logoText = computed(() => props.text ?? config.public.logoText)
 function getCssVar(name: string) {
   if (typeof window !== 'undefined') {
-    return getComputedStyle(document.documentElement).getPropertyValue(name) || '#805AD5'
+    return getComputedStyle(document.documentElement).getPropertyValue(name) || '#c96442'
   }
-  return '#805AD5'
+  return '#c96442'
 }
 </script> 

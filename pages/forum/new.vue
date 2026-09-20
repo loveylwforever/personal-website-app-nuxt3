@@ -60,28 +60,28 @@ function submitPost() {
 
 <style scoped>
 :root {
-  --gradient-start: #3b82f6;
-  --gradient-end: #6366f1;
-  --dialog-bg: #fff;
-  --dialog-text: #23272f;
+  --gradient-start: #c96442;
+  --gradient-end: #d97757;
+  --dialog-bg: #faf9f5;
+  --dialog-text: #141413;
   --input-bg: #fff;
-  --input-border: #bfc8dc;
-  --input-shadow: 0 2px 8px rgba(80,80,120,0.04);
-  --input-placeholder: #bfc8dc;
-  --select-bg: #f4f6fa;
+  --input-border: #e8e6dc;
+  --input-shadow: 0 0 0 1px #f0eee6;
+  --input-placeholder: #b0aea5;
+  --select-bg: #f5f4ed;
   --option-bg: #fff;
 }
 [data-theme="dark"] {
-  --gradient-start: #23272f;
-  --gradient-end: #353a45;
-  --dialog-bg: #23272f;
-  --dialog-text: #f3f4f6;
-  --input-bg: #23272f;
-  --input-border: #444a58;
+  --gradient-start: #30302e;
+  --gradient-end: #141413;
+  --dialog-bg: #30302e;
+  --dialog-text: #faf9f5;
+  --input-bg: #30302e;
+  --input-border: #3d3d3a;
   --input-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  --input-placeholder: #666e7a;
-  --select-bg: #23272f;
-  --option-bg: #23272f;
+  --input-placeholder: #87867f;
+  --select-bg: #30302e;
+  --option-bg: #30302e;
 }
 .dialog-mask {
   min-height: 100vh;
@@ -91,13 +91,13 @@ function submitPost() {
   background: transparent;
 }
 .post-dialog-gradient {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  padding: 2.5px;
+  background: var(--gradient-start);
+  padding: 1px;
   border-radius: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 8px 40px rgba(80,80,120,0.18);
+  box-shadow: 0 0 0 1px #d1cfc5;
 }
 .post-dialog-card {
   background: var(--dialog-bg);
@@ -110,7 +110,7 @@ function submitPost() {
   display: flex;
   flex-direction: column;
   gap: 28px;
-  box-shadow: 0 2px 16px rgba(80,80,120,0.10);
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 24px;
   position: relative;
 }
 @media (max-width: 600px) {
@@ -119,7 +119,7 @@ function submitPost() {
 .dialog-header h2 {
   font-size: 24px;
   font-weight: bold;
-  color: var(--gradient-end, #6366f1);
+  color: var(--text-color, #141413);
   margin-bottom: 2px;
 }
 .dialog-header .desc {
@@ -134,38 +134,38 @@ function submitPost() {
 }
 label {
   font-size: 15px;
-  color: #bbb;
+  color: #5e5d59;
   font-weight: 500;
 }
 .input-title, .input-content {
   background: #fff;
-  color: #23272f;
-  border: 2px solid #e0e7ef;
+  color: #141413;
+  border: 1px solid #f0eee6;
   border-radius: 12px;
   font-size: 17px;
   padding: 12px 16px;
   font-weight: 500;
-  box-shadow: 0 2px 8px rgba(80,80,120,0.04);
+  box-shadow: 0 0 0 1px #f0eee6;
   transition: border 0.18s, box-shadow 0.18s, background 0.18s;
 }
 [data-theme="dark"] input.input-title,
 [data-theme="dark"] textarea.input-content {
-  background: #23272f !important;
-  color: #f3f4f6 !important;
-  border: 2px solid #353a45 !important;
+  background: #30302e !important;
+  color: #faf9f5 !important;
+  border: 1px solid #3d3d3a !important;
 }
 .input-title:focus, .input-content:focus {
-  border-color: var(--gradient-end, #6366f1);
+  border-color: #c96442;
   outline: none;
 }
 .input-title::placeholder,
 .input-content::placeholder {
-  color: #bfc8dc;
+  color: #b0aea5;
   opacity: 1;
 }
 [data-theme="dark"] .input-title::placeholder,
 [data-theme="dark"] .input-content::placeholder {
-  color: #666e7a;
+  color: #87867f;
 }
 .input-category {
   width: 100%;
@@ -180,17 +180,16 @@ label {
   border-radius: 999px;
   padding: 12px 36px;
   font-size: 17px;
-  background: linear-gradient(90deg, var(--gradient-start, #3b82f6), var(--gradient-end, #6366f1));
+  background: #c96442;
   color: #fff;
   border: none;
   font-weight: bold;
-  box-shadow: 0 2px 8px rgba(80,80,120,0.10);
+  box-shadow: 0 0 0 1px #c96442;
   cursor: pointer;
   transition: background 0.18s, box-shadow 0.18s;
 }
 .post-btn:hover {
-  background: linear-gradient(90deg, var(--gradient-end, #6366f1), var(--gradient-start, #3b82f6));
-  box-shadow: 0 4px 16px rgba(80,80,120,0.16);
+  box-shadow: 0 0 0 1px #d1cfc5;
 }
 .cancel-btn {
   border-radius: 999px;
@@ -204,17 +203,17 @@ label {
   text-decoration: none;
 }
 .cancel-btn:hover {
-  background: #232a36;
+  background: #30302e;
 }
 
 /* el-select 下拉菜单背景色明暗模式适配 */
 :deep(.el-select-dropdown) {
   background-color: #fff !important;
-  color: #23272f !important;
+  color: #141413 !important;
 }
 [data-theme="dark"] :deep(.el-select-dropdown) {
-  background-color: #23272f !important;
-  color: #f3f4f6 !important;
+  background-color: #30302e !important;
+  color: #faf9f5 !important;
 }
 :deep(.el-select-dropdown__item) {
   color: inherit !important;

@@ -71,7 +71,7 @@ const visitProject = (project: string) => {
             </div>
           </div>
           <div class="project-actions">
-            <el-button type="primary" @click="visitProject('circle')">
+            <el-button type="primary" class="warm-cta" @click="visitProject('circle')">
               访问社区
             </el-button>
           </div>
@@ -101,7 +101,7 @@ const visitProject = (project: string) => {
             </div>
           </div>
           <div class="project-actions">
-            <el-button type="primary" @click="visitProject('tauri')">
+            <el-button type="primary" class="warm-cta" @click="visitProject('tauri')">
               了解更多
             </el-button>
           </div>
@@ -131,7 +131,7 @@ const visitProject = (project: string) => {
             </div>
           </div>
           <div class="project-actions">
-            <el-button type="primary" @click="visitProject('electron')">
+            <el-button type="primary" class="warm-cta" @click="visitProject('electron')">
               了解更多
             </el-button>
           </div>
@@ -161,7 +161,7 @@ const visitProject = (project: string) => {
             </div>
           </div>
           <div class="project-actions">
-            <el-button type="primary" @click="visitProject('admin')">
+            <el-button type="primary" class="warm-cta" @click="visitProject('admin')">
               了解更多
             </el-button>
           </div>
@@ -354,6 +354,18 @@ const visitProject = (project: string) => {
         }
       }
     }
+  }
+
+  :deep(.warm-cta.el-button--primary) {
+    background: #c96442 !important;
+    border-color: #c96442 !important;
+    color: #faf9f5 !important;
+    box-shadow: 0 0 0 1px #c96442 !important;
+  }
+
+  :deep(.warm-cta.el-button--primary:hover) {
+    box-shadow: 0 0 0 1px #d1cfc5 !important;
+    transform: translateY(-1px);
   }
 }
 

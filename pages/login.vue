@@ -5,7 +5,9 @@
       返回首页
     </div>
     <div class="login-left">
-      <Three3DParticles :theme="themeStore.currentTheme" />
+      <ClientOnly>
+        <Three3DParticles :theme="themeStore.currentTheme" />
+      </ClientOnly>
     </div>
     <div class="login-right">
       <div class="login-card">
@@ -163,17 +165,13 @@ if (typeof window === 'undefined') {
 }
 
 onMounted(() => {
-  // 确保客户端渲染时errors已初始化
   if (!errors.value) {
     errors.value = {
       username: '',
       password: '',
-      confirm: ''
+      confirm: '',
     }
   }
-  
-  // 确保主题设置在DOM中正确应用
-  themeStore.updateDOM()
 })
 
 function validateUsername() {
@@ -263,7 +261,7 @@ function goHome() {
   
   // 亮色模式和暗色模式不同的渐变背景
   &.light {
-    background: linear-gradient(135deg, #f3e7ff, #dacaff);
+    background: linear-gradient(135deg, #f5f4ed, #e8e6dc);
     
     .login-card {
       box-shadow: 
@@ -284,7 +282,7 @@ function goHome() {
   }
   
   &.dark {
-    background: linear-gradient(135deg, #2a1b47, #1e1438);
+    background: linear-gradient(135deg, #141413, #30302e);
     
     .login-card {
       background: rgba(30, 30, 40, 0.95);
@@ -405,10 +403,14 @@ function goHome() {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   cursor: pointer;
   transition: all 0.25s ease;
+  background: #e8e6dc;
+  color: #4d4c48;
+  border: 1px solid #d1cfc5;
+  box-shadow: 0 0 0 1px #d1cfc5;
   
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 1px #c2c0b6;
   }
   
   &:active {
@@ -454,8 +456,11 @@ function goHome() {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    height: 5px;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0.2), rgba(255,255,255,0));
+    transform: translateX(-100%);
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 }
 
@@ -595,7 +600,7 @@ h2 {
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   border: none;
   color: #fff;
-  transition: all 0.3s ease;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
   margin-bottom: 24px;
@@ -609,7 +614,7 @@ h2 {
     height: 100%;
     background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0.2), rgba(255,255,255,0));
     transform: translateX(-100%);
-    transition: transform 0.6s ease;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
   
   &:hover {
@@ -664,41 +669,41 @@ h2 {
       background: #f5f7fa;
       color: var(--text-color);
       cursor: pointer;
-      transition: all 0.2s ease;
-      
-      &:hover {
-        transform: translateY(-3px);
-      }
-      
-      &.wechat {
-        color: var(--text-color);
-        
-        :deep(svg) {
-          width: 24px;
-          height: 24px;
-          transition: all 0.2s ease;
-        }
+      transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         
         &:hover {
-          background: #f5f7fa;
-          color: var(--gradient-start);
-        }
-      }
-      
-      &.qq {
-        color: var(--text-color);
-        
-        :deep(svg) {
-          width: 24px;
-          height: 24px;
-          transition: all 0.2s ease;
+          transform: translateY(-3px);
         }
         
-        &:hover {
-          background: #f5f7fa;
-          color: var(--gradient-start);
+        &.wechat {
+          color: var(--text-color);
+          
+          :deep(svg) {
+            width: 24px;
+            height: 24px;
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          }
+          
+          &:hover {
+            background: #f5f7fa;
+            color: var(--gradient-start);
+          }
         }
-      }
+        
+        &.qq {
+          color: var(--text-color);
+          
+          :deep(svg) {
+            width: 24px;
+            height: 24px;
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          }
+          
+          &:hover {
+            background: #f5f7fa;
+            color: var(--gradient-start);
+          }
+        }
       
       &.qq:hover {
         background: #f5f7fa;
@@ -848,4 +853,47 @@ h2 {
     height: 32px;
   }
 }
-</style> 
+
+/* Claude-style page overrides */
+.login-page.light,
+.login-page.dark {
+  background: var(--bg-color);
+}
+
+.login-right {
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.login-card {
+  background: color-mix(in srgb, var(--card-bg) 94%, var(--bg-color));
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.login-card::before {
+  display: none;
+}
+
+h2 {
+  background: none;
+  -webkit-text-fill-color: var(--text-color);
+  color: var(--text-color);
+  font-size: 30px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.login-btn {
+  border-radius: 12px;
+  background: #c96442;
+  box-shadow: 0 0 0 1px #c96442;
+}
+
+.back-home-btn {
+  border: 1px solid var(--border-color);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+</style>

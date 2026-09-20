@@ -164,3 +164,41 @@ html body .el-select-dropdown__item.is-active {
   color: var(--gradient-start) !important;
   font-weight: bold !important;
 }
+
+/* ====== Global primary button hard override (remove any blue fallback) ====== */
+:root {
+  --warm-primary: #c96442;
+  --warm-primary-hover-ring: #d1cfc5;
+  --warm-primary-text: #faf9f5;
+}
+
+html body .el-button--primary,
+html body .el-button.el-button--primary,
+html body .el-button--primary.is-plain,
+html body .el-button--primary.is-round,
+html body .el-button--primary.is-circle {
+  background: var(--warm-primary) !important;
+  background-color: var(--warm-primary) !important;
+  border-color: var(--warm-primary) !important;
+  color: var(--warm-primary-text) !important;
+  box-shadow: 0 0 0 1px var(--warm-primary) !important;
+}
+
+html body .el-button--primary:not(.is-disabled):hover,
+html body .el-button--primary:not(.is-disabled):focus,
+html body .el-button--primary:not(.is-disabled):active {
+  background: var(--warm-primary) !important;
+  background-color: var(--warm-primary) !important;
+  border-color: var(--warm-primary-hover-ring) !important;
+  color: var(--warm-primary-text) !important;
+  box-shadow: 0 0 0 1px var(--warm-primary-hover-ring) !important;
+}
+
+html body .el-button--primary.is-disabled,
+html body .el-button--primary.is-disabled:hover,
+html body .el-button--primary.is-disabled:focus {
+  background: color-mix(in srgb, var(--warm-primary) 65%, #ffffff) !important;
+  background-color: color-mix(in srgb, var(--warm-primary) 65%, #ffffff) !important;
+  border-color: color-mix(in srgb, var(--warm-primary) 65%, #ffffff) !important;
+  color: #faf9f5 !important;
+}

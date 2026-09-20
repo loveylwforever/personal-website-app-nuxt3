@@ -61,9 +61,9 @@ const currentYear = new Date().getFullYear();
 <style lang="scss" scoped>
 .app-footer {
   position: relative;
-  padding: 40px 0 20px;
+  padding: 20px 0 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: 50px;
+  margin-top: 30px;
   background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   opacity: 0.95;
   backdrop-filter: blur(10px);
@@ -77,7 +77,7 @@ const currentYear = new Date().getFullYear();
   .footer-content {
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: 18px;
     position: relative;
     z-index: 1;
   }
@@ -146,18 +146,18 @@ const currentYear = new Date().getFullYear();
   .footer-links {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 28px;
+    gap: 16px;
     
     .link-group {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 6px;
       
       h3 {
         font-size: 16px;
         font-weight: 600;
         color: rgba(255, 255, 255, 0.9);
-        margin-bottom: 8px;
+        margin-bottom: 4px;
         position: relative;
         padding-bottom: 8px;
         
@@ -176,12 +176,12 @@ const currentYear = new Date().getFullYear();
       a {
         color: rgba(255, 255, 255, 0.6);
         text-decoration: none;
-        font-size: 14px;
+        font-size: 13px;
         transition: color 0.2s ease, transform 0.2s ease;
         display: inline-flex;
         align-items: center;
         padding-left: 0;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
         
         &::before {
           content: '›';
@@ -208,21 +208,50 @@ const currentYear = new Date().getFullYear();
   
   .footer-bottom {
     text-align: center;
-    padding-top: 20px;
+    padding-top: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     
     .footer-slogan {
-      font-size: 14px;
+      font-size: 13px;
       color: rgba(255, 255, 255, 0.6);
-      margin-bottom: 10px;
+      margin-bottom: 6px;
       letter-spacing: 1px;
     }
     
     .footer-copyright {
-      font-size: 12px;
+      font-size: 11px;
       color: rgba(255, 255, 255, 0.4);
     }
   }
+}
+
+/* Claude-style visual overrides */
+.app-footer {
+  background: color-mix(in srgb, var(--bg-darker) 82%, var(--card-bg));
+  border-top: 1px solid var(--border-color);
+  opacity: 1;
+}
+
+.app-footer .footer-logo .logo-text,
+.app-footer .footer-links .link-group h3 {
+  color: var(--text-color);
+}
+
+.app-footer .footer-links .link-group a {
+  color: var(--text-secondary);
+}
+
+.app-footer .footer-links .link-group a:hover {
+  color: var(--text-color);
+}
+
+.app-footer .footer-bottom {
+  border-top-color: var(--border-color);
+}
+
+.app-footer .footer-bottom .footer-slogan,
+.app-footer .footer-bottom .footer-copyright {
+  color: var(--text-tertiary);
 }
 
 @media (max-width: 768px) {
@@ -235,7 +264,7 @@ const currentYear = new Date().getFullYear();
     }
     
     .footer-content {
-      gap: 28px;
+      gap: 14px;
     }
     
     .footer-top {
@@ -254,7 +283,7 @@ const currentYear = new Date().getFullYear();
     
     .footer-links {
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 12px;
       text-align: center;
       
       .link-group {

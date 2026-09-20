@@ -1,34 +1,31 @@
-// 主题变量定义
-
 :root {
-  // 浅色主题变量
-  --bg-color: #ffffff;
-  --bg-darker: #f5f5f5;
-  --text-color: #333333;
-  --text-secondary: #666666;
-  --text-tertiary: #999999;
-  --border-color: rgba(0, 0, 0, 0.1);
-  --card-bg: #ffffff;
-  
-  --gradient-start: #7367f0;
-  --gradient-start-rgb: 115, 103, 240;
-  --gradient-end: #ce9ffc;
-  --gradient-end-rgb: 206, 159, 252;
+  --bg-color: #f5f4ed;
+  --bg-darker: #e8e6dc;
+  --text-color: #141413;
+  --text-secondary: #5e5d59;
+  --text-tertiary: #87867f;
+  --border-color: #e8e6dc;
+  --card-bg: #faf9f5;
+  --header-bg: color-mix(in srgb, #f5f4ed 90%, transparent);
+  --hover-bg: color-mix(in srgb, #141413 5%, transparent);
+  --primary-color: #c96442;
+  --primary-dark: #b95536;
+  --primary-light: #d97757;
+  --gradient-start: #c96442;
+  --gradient-start-rgb: 201, 100, 66;
+  --gradient-end: #d97757;
+  --gradient-end-rgb: 217, 119, 87;
+  --current-font-family: var(--font-family-default);
 }
 
 html.dark {
-  // 深色主题变量
-  --bg-color: #121212;
-  --bg-darker: #1a1a1a;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-tertiary: rgba(255, 255, 255, 0.5);
-  --border-color: rgba(255, 255, 255, 0.1);
-  --card-bg: #1e1e1e;
-  
-  // 可以保持相同或调整渐变色
-  --gradient-start: #7367f0;
-  --gradient-start-rgb: 115, 103, 240;
-  --gradient-end: #ce9ffc;
-  --gradient-end-rgb: 206, 159, 252;
-} 
+  --bg-color: #141413;
+  --bg-darker: #30302e;
+  --text-color: #faf9f5;
+  --text-secondary: #b0aea5;
+  --text-tertiary: #87867f;
+  --border-color: #30302e;
+  --card-bg: #30302e;
+  --header-bg: color-mix(in srgb, #141413 90%, transparent);
+  --hover-bg: color-mix(in srgb, #faf9f5 6%, transparent);
+}

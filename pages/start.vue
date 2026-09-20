@@ -307,7 +307,7 @@ const handleWebExperience = () => {
         color: white !important;
         font-weight: 500 !important;
         font-size: 16px !important;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
         position: relative;
         overflow: hidden;
         
@@ -320,7 +320,7 @@ const handleWebExperience = () => {
           bottom: 0;
           background: linear-gradient(135deg, var(--gradient-end), var(--gradient-start));
           opacity: 0;
-          transition: opacity 0.3s ease;
+          transition: opacity 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           z-index: -1;
         }
         
@@ -424,5 +424,34 @@ const handleWebExperience = () => {
       }
     }
   }
+}
+
+/* Claude-style page overrides */
+.start-page .page-title {
+  background: none;
+  -webkit-text-fill-color: var(--text-color);
+  color: var(--text-color);
+}
+
+.start-page .installation-steps .step-card {
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+.start-page .installation-steps .step-card .step-number {
+  background: #c96442;
+}
+
+.start-page .installation-steps .step-card .download-options .el-button,
+.start-page .installation-steps .step-card .start-button {
+  background: #c96442 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 0 0 1px #c96442 !important;
+}
+
+.start-page .requirements .requirements-grid .requirement-card {
+  background: color-mix(in srgb, var(--card-bg) 92%, var(--bg-color));
+  border: 1px solid var(--border-color);
 }
 </style> 

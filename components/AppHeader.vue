@@ -209,15 +209,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useBreakpoints } from '@vueuse/core'
-import { Search, Moon, Sunny, User, Menu, ArrowDown, ArrowRight, Close, Setting } from '@element-plus/icons-vue'
-import { Github, ThemeToggle } from '~/assets/icons'
-import { useLayoutStore } from '~/stores/layout'
-import { useThemeStore } from '~/stores/theme'
-import { useFontStore } from '~/stores/font'
-import Logo from '~/components/Logo.vue'
+import { Search, User, Menu, ArrowDown, Close, Setting } from '@element-plus/icons-vue'
+import { ThemeToggle } from '~/assets/icons'
+import type { HomeLayout } from '~/stores/layout'
 
 const route = useRoute()
 const router = useRouter()
@@ -229,152 +223,96 @@ const searchQuery = ref('')
 const searchInputRef = ref<{ $el: HTMLElement } | null>(null)
 const mobileMenuOpen = ref(false)
 const ecosystemMenuOpen = ref(false)
-const isHovered = ref(false)
 const settingsPanelOpen = ref(false)
-const rippleLock = ref(false)
+const isMac = ref(false)
 
-// 使用Pinia的theme store
 const isDark = computed(() => themeStore.isDark)
-
-// 初始化布局和字体设置
-const currentLayout = ref(layoutStore.layout)
-const currentFont = ref(String(fontStore.currentFont || 'default'))
+const currentLayout = computed({
+  get: () => layoutStore.layout,
+  set: (value: HomeLayout) => layoutStore.setLayout(value),
+})
+const currentFont = ref(fontStore.currentFont)
 const availableFonts = computed(() => fontStore.availableFonts)
+const breakpoints = useBreakpoints({ tablet: 992 })
+const isMobile = breakpoints.smaller('tablet')
 
-watch(currentFont, (val) => {
-  fontStore.setFont(val)
+watch(currentFont, (value) => {
+  fontStore.setFont(value)
   fontStore.savePreference()
 })
 
-const breakpoints = useBreakpoints({
-  mobile: 768,
-  tablet: 992,
-  desktop: 1200,
-})
-
-// 恢复移动端断点逻辑
-const isMobileState = ref(false)
-const isMobile = computed(() => isMobileState.value)
-
-// 使用 ref 存储 Mac 状态，默认为 false
-const isMacState = ref(false)
-
-// 计算属性现在直接返回状态值
-const isMac = computed(() => isMacState.value)
-
 onMounted(() => {
-  isMobileState.value = breakpoints.smaller('tablet').value
-  watch(breakpoints.smaller('tablet'), (isSmaller) => {
-    isMobileState.value = isSmaller
-  })
-  
-  // 检测是否为 Mac 平台
-  if (typeof navigator !== 'undefined') {
-    isMacState.value = navigator.platform ? navigator.platform.toUpperCase().indexOf('MAC') >= 0 : false
-  }
-
-  // 添加键盘事件监听
+  isMac.value = /Mac|iPhone|iPad/.test(navigator.userAgent)
   document.addEventListener('keydown', handleKeydown)
-
-  // 保证currentFont的值在可选字体中，否则回退到第一个
-  if (!availableFonts.value.some((f: { id: string }) => f.id === currentFont.value)) {
-    currentFont.value = availableFonts.value[0]?.id || 'default'
-  }
 })
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeydown)
 })
 
-const handleKeydown = (event: KeyboardEvent) => {
-  // Check for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+function handleKeydown(event: KeyboardEvent) {
   if ((isMac.value ? event.metaKey : event.ctrlKey) && event.key.toLowerCase() === 'k') {
     event.preventDefault()
-    focusSearch()
+    searchInputRef.value?.$el?.querySelector('input')?.focus()
   }
-  
-  // Close search on Escape
-  if (event.key === 'Escape') {
-    if (searchInputRef.value?.$el?.querySelector('input') === document.activeElement) {
-      event.preventDefault()
-      searchInputRef.value.$el.querySelector('input')?.blur()
-      searchQuery.value = ''
-    } else if (settingsPanelOpen.value) {
-      closeSettingsPanel()
-    }
+
+  if (event.key !== 'Escape') return
+  if (searchInputRef.value?.$el?.querySelector('input') === document.activeElement) {
+    event.preventDefault()
+    searchInputRef.value.$el.querySelector('input')?.blur()
+    searchQuery.value = ''
+    return
   }
+  if (settingsPanelOpen.value) closeSettingsPanel()
 }
 
-const focusSearch = () => {
-  if (searchInputRef.value?.$el) {
-    searchInputRef.value.$el.querySelector('input')?.focus()
-  }
-}
-
-const toggleMobileMenu = () => {
+function toggleMobileMenu() {
   mobileMenuOpen.value = !mobileMenuOpen.value
-  if (!mobileMenuOpen.value) {
-    ecosystemMenuOpen.value = false
-  }
+  if (!mobileMenuOpen.value) ecosystemMenuOpen.value = false
 }
 
-const toggleEcosystemMenu = () => {
+function toggleEcosystemMenu() {
   ecosystemMenuOpen.value = !ecosystemMenuOpen.value
 }
 
-const closeMobileMenu = () => {
+function closeMobileMenu() {
   mobileMenuOpen.value = false
   ecosystemMenuOpen.value = false
 }
 
-const toggleTheme = () => {
-  themeStore.toggleTheme()
-}
-
-const openUserMenu = () => {
+function openUserMenu() {
   router.push('/login')
-}
-
-const openChangelog = () => {
-  router.push('/changelog')
 }
 
 function goHome() {
   router.push('/')
 }
 
-// 网站设置面板
-const toggleSettingsPanel = () => {
+function toggleSettingsPanel() {
   settingsPanelOpen.value = !settingsPanelOpen.value
 }
 
-const closeSettingsPanel = () => {
+function closeSettingsPanel() {
   settingsPanelOpen.value = false
 }
 
-// 布局设置
-const setLayout = (value: string) => {
-  layoutStore.setLayout(value)
+function setLayout(value: string) {
+  if (value === 'default' || value === 'alternative') {
+    layoutStore.setLayout(value)
+  }
 }
 
-// 获取字体的CSS字体族
-const getFontFamily = (fontId: string): string => {
-  return fontStore.getFontFamilyValue(fontId);
+function getFontFamily(fontId: string) {
+  return fontStore.getFontFamilyValue(fontId)
 }
 
-function onThemeToggle(e: MouseEvent) {
-  if (rippleLock.value) return
-  rippleLock.value = true
-  // 直接切换主题
+function onThemeToggle() {
   themeStore.toggleTheme()
-  rippleLock.value = false
 }
 
 function onEcosystemTriggerClick(event: MouseEvent) {
-  // If the click is on the dropdown arrow, do nothing (let dropdown open)
-  const arrow = (event.target as HTMLElement).closest('.el-icon');
-  if (arrow) return;
-  router.push('/forum');
+  if ((event.target as HTMLElement).closest('.el-icon')) return
+  router.push('/forum')
 }
 </script>
 
@@ -564,7 +502,7 @@ function onEcosystemTriggerClick(event: MouseEvent) {
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         position: relative;
         overflow: hidden;
         
@@ -583,14 +521,16 @@ function onEcosystemTriggerClick(event: MouseEvent) {
           bottom: 0;
           background: var(--gradient-start);
           opacity: 0;
-          transition: opacity 0.3s ease;
+          transition: opacity 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           z-index: 0;
         }
         
         &:hover {
           color: var(--text-color);
           transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
           border-color: var(--gradient-start);
+          transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           
           &::before {
             opacity: 0.1;
@@ -639,7 +579,7 @@ function onEcosystemTriggerClick(event: MouseEvent) {
     background: rgba(234, 179, 8, 0.05);
     font-size: 13px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     min-width: 200px;
     max-width: 800px;
     margin: 0 auto;
@@ -693,7 +633,7 @@ function onEcosystemTriggerClick(event: MouseEvent) {
       .arrow-icon {
         font-size: 12px;
         color: rgba(234, 179, 8, 0.8);
-        transition: transform 0.2s ease;
+        transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
     }
   }
@@ -788,7 +728,7 @@ function onEcosystemTriggerClick(event: MouseEvent) {
     font-size: 16px;
     padding: 12px 16px;
     border-radius: 8px;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     
     &:hover, &.active {
       color: var(--text-color);
@@ -933,18 +873,18 @@ function onEcosystemTriggerClick(event: MouseEvent) {
 }
 .app-header .el-dropdown-menu__item:hover,
 .app-header .el-dropdown-menu__item.is-active {
-  background: linear-gradient(135deg, var(--gradient-start, #805AD5) 0%, var(--gradient-end, #FFD200) 100%) !important;
+  background: #c96442 !important;
   color: #fff !important;
 }
 .app-header.dark .el-dropdown-menu__item:hover,
 .app-header.dark .el-dropdown-menu__item.is-active {
-  background: linear-gradient(135deg, #232526 0%, #805AD5 100%) !important;
+  background: #30302e !important;
   color: #fff !important;
 }
 .app-header.light .el-dropdown-menu__item:hover,
 .app-header.light .el-dropdown-menu__item.is-active {
-  background: linear-gradient(135deg, #ffd200 0%, #805AD5 100%) !important;
-  color: #222 !important;
+  background: #e8e6dc !important;
+  color: #141413 !important;
 }
 
 /* 网站设置面板样式 */
@@ -1243,5 +1183,41 @@ function onEcosystemTriggerClick(event: MouseEvent) {
   display: block;
   width: 100%;
   box-sizing: border-box;
+}
+
+/* Claude-style visual overrides */
+.app-header {
+  position: sticky;
+  top: 0;
+  background: color-mix(in srgb, var(--bg-color) 90%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.app-header .logo-container .logo-text {
+  background: none;
+  -webkit-text-fill-color: var(--text-color);
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+.app-header .nav-menu .nav-item:hover::after,
+.app-header .nav-menu .nav-item.active::after {
+  background: var(--text-color);
+}
+
+.app-header .header-actions .search-container .search-input :deep(.el-input__wrapper) {
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card-bg) 92%, var(--bg-color));
+}
+
+.app-header .header-actions .action-buttons .icon-button {
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--card-bg) 92%, var(--bg-color));
+}
+
+.app-header .header-actions .action-buttons .icon-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px #d1cfc5;
+  border-color: #d1cfc5;
 }
 </style>
