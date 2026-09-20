@@ -18,7 +18,7 @@
           <textarea v-model="content" rows="8" placeholder="请输入内容" />
         </label>
         <div class="actions">
-          <AppButton variant="ghost" @click="router.push('/forum')">取消</AppButton>
+          <AppButton variant="ghost" @click="navigateTo('/forum')">取消</AppButton>
           <AppButton type="submit">提交</AppButton>
         </div>
       </form>
@@ -32,7 +32,7 @@ definePageMeta({
   title: '某某软件 - 发新帖'
 })
 
-const router = useRouter()
+const store = useForumStore()
 const { success, warning } = useToast()
 const title = ref('')
 const category = ref('')
@@ -51,8 +51,9 @@ function submitPost() {
     warning('请填写完整内容')
     return
   }
+  store.addPost(title.value.trim(), '访客', content.value.trim(), category.value)
   success('发帖成功！')
-  router.push('/forum')
+  navigateTo('/forum')
 }
 </script>
 

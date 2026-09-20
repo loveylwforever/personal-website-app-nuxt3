@@ -7,6 +7,7 @@ const emit = defineEmits<{
   close: []
 }>()
 
+const route = useRoute()
 const ecosystemOpen = ref(false)
 
 function close() {
@@ -14,7 +15,7 @@ function close() {
   emit('close')
 }
 
-watch(() => useRoute().path, close)
+watch(() => route.path, close)
 </script>
 
 <template>

@@ -1,9 +1,9 @@
 <template>
-  <div class="login-page" :class="themeStore.currentTheme">
-    <div class="back-home-btn" @click="goHome">
+  <div class="login-page">
+    <button type="button" class="back-home-btn" @click="navigateTo('/')">
       <AppIcon name="arrow-left" :size="16" />
       返回首页
-    </div>
+    </button>
     <div class="login-left">
       <ClientOnly>
         <Three3DParticles :theme="themeStore.currentTheme" />
@@ -11,12 +11,10 @@
     </div>
     <div class="login-right">
       <div class="login-card hero-rise">
-        <!-- 主题切换开关 -->
-        <div class="theme-toggle" @click="themeStore.toggleTheme">
+        <button type="button" class="theme-toggle" aria-label="切换主题" @click="themeStore.toggleTheme">
           <AppIcon :name="themeStore.isDark ? 'sun' : 'moon'" />
-        </div>
-        
-        <!-- 品牌元素 -->
+        </button>
+
         <div class="brand-wrapper">
           <div class="app-logo">
             <Logo style="width:50px;height:50px;" />
@@ -24,15 +22,13 @@
           <h2>{{ isRegister ? '创建新账号' : '欢迎回来' }}</h2>
           <p class="welcome-text">{{ isRegister ? '加入我们的社区，探索更多可能' : '登录您的账号，继续您的旅程' }}</p>
         </div>
-        
+
         <form @submit.prevent="handleSubmit">
-          <!-- 用户名输入框 -->
-          <div class="form-item" :class="{ 'focus': activeInput === 'username' }">
+          <div class="form-item">
             <AppInput
               v-model="form.username"
               placeholder="用户名"
               :invalid="!!errors.username"
-              @focus="activeInput = 'username'"
               @blur="validateUsername"
             >
               <template #prefix>
@@ -41,14 +37,13 @@
             </AppInput>
             <div v-if="errors.username" class="error-message">{{ errors.username }}</div>
           </div>
-          
-          <div class="form-item" :class="{ 'focus': activeInput === 'password' }">
+
+          <div class="form-item">
             <AppInput
               v-model="form.password"
               type="password"
               placeholder="密码"
               :invalid="!!errors.password"
-              @focus="activeInput = 'password'"
               @blur="validatePassword"
             >
               <template #prefix>
@@ -57,14 +52,13 @@
             </AppInput>
             <div v-if="errors.password" class="error-message">{{ errors.password }}</div>
           </div>
-          
-          <div v-if="isRegister" class="form-item" :class="{ 'focus': activeInput === 'confirm' }">
+
+          <div v-if="isRegister" class="form-item">
             <AppInput
               v-model="form.confirm"
               type="password"
               placeholder="确认密码"
               :invalid="!!errors.confirm"
-              @focus="activeInput = 'confirm'"
               @blur="validateConfirm"
             >
               <template #prefix>
@@ -73,30 +67,28 @@
             </AppInput>
             <div v-if="errors.confirm" class="error-message">{{ errors.confirm }}</div>
           </div>
-          
+
           <div class="form-options">
             <AppCheckbox v-model="rememberMe" label="记住我" />
             <span v-if="!isRegister" class="forgot-password">忘记密码？</span>
           </div>
-          
+
           <AppButton type="submit" class="login-btn" :loading="isSubmitting">
             {{ isRegister ? '创建账号' : '登录' }}
           </AppButton>
         </form>
-        
-        <!-- 其他登录方式 -->
+
         <div class="social-login">
           <div class="divider">
             <span>或使用以下方式</span>
           </div>
           <div class="social-icons">
-            <div class="social-icon wechat"><Wechat /></div>
-            <div class="social-icon qq"><QQ /></div>
-            <div class="social-icon weibo"><AppIcon name="share" /></div>
+            <div class="social-icon"><Wechat /></div>
+            <div class="social-icon"><QQ /></div>
+            <div class="social-icon"><AppIcon name="share" /></div>
           </div>
         </div>
-        
-        <!-- 切换登录/注册 -->
+
         <div class="switch-link">
           <span @click="switchMode">
             {{ isRegister ? '已有账号？去登录' : '没有账号？去注册' }}
@@ -114,10 +106,8 @@ import QQ from '~/assets/icons/qq.vue'
 definePageMeta({ layout: false })
 
 const themeStore = useThemeStore()
-const router = useRouter()
 const isRegister = ref(false)
 const form = ref({ username: '', password: '', confirm: '' })
-const activeInput = ref('')
 const rememberMe = ref(false)
 const isSubmitting = ref(false)
 const errors = ref({
@@ -126,8 +116,9 @@ const errors = ref({
   confirm: '',
 })
 
+let submitTimer = 0
+
 function validateUsername() {
-  activeInput.value = ''
   if (!form.value.username) {
     errors.value.username = '请输入用户名'
     return false
@@ -141,7 +132,6 @@ function validateUsername() {
 }
 
 function validatePassword() {
-  activeInput.value = ''
   if (!form.value.password) {
     errors.value.password = '请输入密码'
     return false
@@ -155,7 +145,6 @@ function validatePassword() {
 }
 
 function validateConfirm() {
-  activeInput.value = ''
   if (!form.value.confirm) {
     errors.value.confirm = '请确认密码'
     return false
@@ -169,26 +158,18 @@ function validateConfirm() {
 }
 
 function validateForm() {
-  const isUsernameValid = validateUsername()
-  const isPasswordValid = validatePassword()
-  
-  if (isRegister.value) {
-    const isConfirmValid = validateConfirm()
-    return isUsernameValid && isPasswordValid && isConfirmValid
-  }
-  
-  return isUsernameValid && isPasswordValid
+  const usernameOk = validateUsername()
+  const passwordOk = validatePassword()
+  if (!isRegister.value) return usernameOk && passwordOk
+  return usernameOk && passwordOk && validateConfirm()
 }
 
 function handleSubmit() {
   if (!validateForm()) return
-  
   isSubmitting.value = true
-  
-  // 模拟API请求
-  setTimeout(() => {
+  submitTimer = window.setTimeout(() => {
     isSubmitting.value = false
-    router.push('/')
+    navigateTo('/')
   }, 1500)
 }
 
@@ -199,9 +180,9 @@ function switchMode() {
   errors.value.confirm = ''
 }
 
-function goHome() {
-  router.push('/')
-}
+onUnmounted(() => {
+  if (submitTimer) window.clearTimeout(submitTimer)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -210,6 +191,11 @@ function goHome() {
   display: flex;
   min-height: 100dvh;
   background: var(--bg-color);
+}
+
+.back-home-btn,
+.theme-toggle {
+  font: inherit;
 }
 
 .back-home-btn {
@@ -268,8 +254,8 @@ function goHome() {
   max-width: 380px;
   padding: 40px 32px;
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
   background: var(--card-bg);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lift);
 }
 

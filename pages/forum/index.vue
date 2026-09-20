@@ -209,14 +209,11 @@ const sortedPosts = computed(() =>
 .forum-table-row {
   color: var(--text-color);
   border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--duration-fast) ease, transform var(--duration-fast) var(--ease-out);
 }
 
 .forum-table-row:last-of-type {
   border-bottom: 0;
-}
-
-.forum-table-row {
-  transition: background-color var(--duration-fast) ease, transform var(--duration-fast) var(--ease-out);
 }
 
 .forum-table-row:hover {

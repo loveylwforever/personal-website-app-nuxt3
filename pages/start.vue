@@ -4,20 +4,12 @@ definePageMeta({
   title: '某某软件 - 开始'
 })
 
-const { success } = useToast()
-
-function download(platform: string) {
-  success(`开始下载 ${platform} 版本`)
-}
-
-function openWeb() {
-  navigateTo('/experience')
-}
+const { download } = useDownload()
 
 const platforms = [
-  { label: 'Windows', value: 'Windows' },
-  { label: 'macOS', value: 'macOS' },
-  { label: 'Linux', value: 'Linux' },
+  { label: 'Windows', value: 'windows' },
+  { label: 'macOS', value: 'macos' },
+  { label: 'Linux', value: 'linux' },
 ]
 </script>
 
@@ -80,7 +72,7 @@ const platforms = [
             <li>加入已有群聊或创建新的群聊</li>
             <li>开始与好友某某、体验 AI 助手等功能</li>
           </ol>
-          <AppButton class="start-button" @click="openWeb">
+          <AppButton class="start-button" @click="navigateTo('/experience')">
             立即体验 Web 版
           </AppButton>
         </div>

@@ -36,21 +36,18 @@ definePageMeta({
 
 const route = useRoute()
 const store = useForumStore()
-const postId = route.params.id as string
-const post = ref(store.posts.find(item => item.id === postId))
+const postId = computed(() => String(route.params.id))
+const post = computed(() => store.posts.find(item => item.id === postId.value))
 const author = ref('')
 const content = ref('')
 
 onMounted(() => {
-  if (post.value) {
-    store.addView(postId)
-    post.value.views++
-  }
+  if (post.value) store.addView(postId.value)
 })
 
 function submitComment() {
   if (author.value && content.value && post.value) {
-    store.addComment(postId, author.value, content.value)
+    store.addComment(postId.value, author.value, content.value)
     content.value = ''
   }
 }

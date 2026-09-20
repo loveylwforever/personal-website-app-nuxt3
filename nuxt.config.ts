@@ -42,11 +42,6 @@ export default defineNuxtConfig({
     classSuffix: "",
     storageKey: "theme",
   },
-  runtimeConfig: {
-    public: {
-      siteName: "某某软件",
-    },
-  },
   typescript: {
     strict: true,
     typeCheck: false,

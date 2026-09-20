@@ -2,12 +2,12 @@
   <header class="app-header">
     <div class="container">
       <button type="button" class="logo-btn" @click="navigateTo('/')">
-        <Logo style="width:32px;height:32px;" />
+        <Logo style="width:28px;height:28px;" />
         <span>某某软件</span>
       </button>
 
       <nav v-if="!isMobile" class="nav-menu">
-        <NuxtLink to="/" :class="{ active: route.path === '/' }">首页</NuxtLink>
+        <NuxtLink to="/" active-class="" exact-active-class="router-link-active">首页</NuxtLink>
         <NuxtLink to="/start">开始</NuxtLink>
         <NuxtLink to="/pricing">定价</NuxtLink>
         <NuxtLink to="/experience">体验</NuxtLink>
@@ -64,7 +64,6 @@
 <script setup lang="ts">
 import { ThemeToggle } from '~/assets/icons'
 
-const route = useRoute()
 const themeStore = useThemeStore()
 const searchQuery = ref('')
 const searchInputRef = ref<{ focus: () => void; blur: () => void } | null>(null)
@@ -101,8 +100,9 @@ function onKeydown(event: KeyboardEvent) {
   position: sticky;
   top: 0;
   z-index: 20;
+  height: var(--header-height);
   min-height: var(--header-height);
-  padding: 12px 0;
+  padding: 8px 0;
   background: var(--header-bg);
   border-bottom: 1px solid var(--border-color);
   backdrop-filter: blur(14px);
@@ -204,6 +204,16 @@ function onKeydown(event: KeyboardEvent) {
 
 .search-input {
   width: 200px;
+}
+
+.header-actions :deep(.app-input),
+.header-actions :deep(.app-btn--icon) {
+  min-height: 32px;
+  height: 32px;
+}
+
+.header-actions :deep(.app-btn--icon) {
+  width: 32px;
 }
 
 .shortcut {

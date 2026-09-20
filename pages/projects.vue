@@ -6,8 +6,6 @@ definePageMeta({
   title: '某某软件 - 项目'
 })
 
-const router = useRouter()
-
 const projects = [
   {
     id: 'circle',
@@ -66,7 +64,7 @@ function visitProject(id: string) {
     electron: '/start',
     admin: '/projects',
   }
-  if (routes[id]) router.push(routes[id])
+  if (routes[id]) navigateTo(routes[id])
 }
 </script>
 

@@ -12,6 +12,7 @@ export interface ForumPost {
   title: string;
   author: string;
   content: string;
+  category: string;
   createdAt: string;
   lastActiveAt: string;
   views: number;
@@ -23,13 +24,14 @@ export const useForumStore = defineStore("forum", {
     posts: [] as ForumPost[],
   }),
   actions: {
-    addPost(title: string, author: string, content: string) {
+    addPost(title: string, author: string, content: string, category = "") {
       const now = new Date().toLocaleString();
       this.posts.unshift({
         id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
         title,
         author,
         content,
+        category,
         createdAt: now,
         lastActiveAt: now,
         views: 0,

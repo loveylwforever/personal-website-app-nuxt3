@@ -4,7 +4,7 @@ definePageMeta({
   title: '某某软件 - 首页'
 })
 
-const colorMode = useColorMode()
+const themeStore = useThemeStore()
 const layoutStore = useLayoutStore()
 const { chars, visible } = useTypewriter('某某软件')
 const { platformDisplay, download } = useDownload()
@@ -41,7 +41,7 @@ function openWeb() {
     </template>
     <HomeDownloadDialog v-model="showOtherDownloads" />
     <ClientOnly>
-      <Three3DParticles :theme="colorMode.value" class="particles-background" />
+      <Three3DParticles :theme="themeStore.currentTheme" class="particles-background" />
     </ClientOnly>
   </div>
 </template>

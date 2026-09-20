@@ -1,18 +1,17 @@
 <script setup lang="ts">
+import type { IconName } from '~/types/icons'
+
 definePageMeta({
   layout: 'default',
   title: '某某软件 - 体验'
 })
 
-const router = useRouter()
-
-function handleDownload() {
-  router.push('/start')
-}
-
-function handleLearnMore() {
-  router.push('/')
-}
+const features: { icon: IconName; title: string; text: string; delay: number }[] = [
+  { icon: 'chat', title: '即时通讯', delay: 40, text: '体验流畅的一对一某某和群聊功能，支持文字、图片、文件等多种消息类型' },
+  { icon: 'robot', title: 'AI 助手', delay: 80, text: '尝试与智能 AI 助手对话，体验 DeepSeek、讯飞星火等大模型的强大能力' },
+  { icon: 'video', title: '音视频通话', delay: 120, text: '测试高清视频通话和语音通话功能，体验流畅的实时通讯体验' },
+  { icon: 'monitor', title: '屏幕共享', delay: 160, text: '一键开启屏幕共享，支持全屏或应用窗口共享，适合远程协作' },
+]
 </script>
 
 <template>
@@ -40,32 +39,16 @@ function handleLearnMore() {
         </div>
 
         <div class="features-list">
-          <div class="feature-item page-card lift-card reveal" style="--reveal-delay: 40ms">
-            <AppIcon name="chat" class="feature-icon" :size="24" />
+          <div
+            v-for="item in features"
+            :key="item.title"
+            class="feature-item page-card lift-card reveal"
+            :style="{ '--reveal-delay': `${item.delay}ms` }"
+          >
+            <AppIcon :name="item.icon" class="feature-icon" :size="24" />
             <div>
-              <h3>即时通讯</h3>
-              <p>体验流畅的一对一某某和群聊功能，支持文字、图片、文件等多种消息类型</p>
-            </div>
-          </div>
-          <div class="feature-item page-card lift-card reveal" style="--reveal-delay: 80ms">
-            <AppIcon name="robot" class="feature-icon" :size="24" />
-            <div>
-              <h3>AI 助手</h3>
-              <p>尝试与智能 AI 助手对话，体验 DeepSeek、讯飞星火等大模型的强大能力</p>
-            </div>
-          </div>
-          <div class="feature-item page-card lift-card reveal" style="--reveal-delay: 120ms">
-            <AppIcon name="video" class="feature-icon" :size="24" />
-            <div>
-              <h3>音视频通话</h3>
-              <p>测试高清视频通话和语音通话功能，体验流畅的实时通讯体验</p>
-            </div>
-          </div>
-          <div class="feature-item page-card lift-card reveal" style="--reveal-delay: 160ms">
-            <AppIcon name="monitor" class="feature-icon" :size="24" />
-            <div>
-              <h3>屏幕共享</h3>
-              <p>一键开启屏幕共享，支持全屏或应用窗口共享，适合远程协作</p>
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.text }}</p>
             </div>
           </div>
         </div>
@@ -75,11 +58,11 @@ function handleLearnMore() {
         <h2 class="page-section-title">准备好了吗？</h2>
         <p>下载桌面客户端，享受更完整的功能体验</p>
         <div class="cta-buttons">
-          <AppButton @click="handleDownload">
+          <AppButton @click="navigateTo('/start')">
             <AppIcon name="download" :size="16" />
             下载客户端
           </AppButton>
-          <AppButton variant="ghost" @click="handleLearnMore">
+          <AppButton variant="ghost" @click="navigateTo('/')">
             <AppIcon name="info" :size="16" />
             了解更多
           </AppButton>

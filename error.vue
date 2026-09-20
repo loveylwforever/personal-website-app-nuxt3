@@ -3,7 +3,7 @@
     <div class="error-content">
       <h1 class="error-title">{{ error?.statusCode === 404 ? '页面未找到' : '出错了' }}</h1>
       <p class="error-message">{{ error?.message || '抱歉，发生了一些错误' }}</p>
-      <AppButton class="warm-cta" @click="handleError">返回首页</AppButton>
+      <AppButton @click="handleError">返回首页</AppButton>
     </div>
   </div>
 </template>
